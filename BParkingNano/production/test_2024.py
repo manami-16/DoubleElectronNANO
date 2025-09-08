@@ -78,20 +78,23 @@ options.register('mode', "reco",
     "Run standard reco ('reco'), efficiency study ('eff'), or trigger matching study ('trg')"
 )
 
-options.setDefault('maxEvents', 1000)
+options.setDefault('maxEvents', -1)
 options.setDefault('tag', '130X')
 options.parseArguments()
 
 #!TEST
 options.isMC = 0
-options.reportEvery = 1000
-options.tag = '2025Jun10'
+options.reportEvery = 5000
+options.tag = '2025Sep8_2files'
 options.globalTag = '140X_dataRun3_v20'
 options.lhcRun = 3
 options.year = 2024
 options.mode = 'vbf'
 options.saveAllNanoContent = 1
-options.inputFiles = ["root://cms-xrd-global.cern.ch//store/data/Run2024I/ParkingVBF1/MINIAOD/MINIv6NANOv15_v2-v3/90000/f6550b8f-2a31-4f6d-8ef8-1b513ad6abb1.root"]
+options.inputFiles = ["root://cms-xrd-global.cern.ch//store/data/Run2024I/ParkingVBF1/MINIAOD/MINIv6NANOv15_v2-v3/90000/f6550b8f-2a31-4f6d-8ef8-1b513ad6abb1.root",
+                      "root://cms-xrd-global.cern.ch//store/data/Run2024I/ParkingVBF1/MINIAOD/MINIv6NANOv15_v2-v3/2520000/0018f66b-9c0a-4a96-9a4c-18c0fe3aa80a.root",]
+                      # "root://cms-xrd-global.cern.ch//store/data/Run2024I/ParkingVBF1/MINIAOD/MINIv6NANOv15_v2-v3/2520000/0058a829-3206-42c9-ac3d-042847249954.root"]
+
 
 print(options)
 
