@@ -7,14 +7,13 @@ common:
     isPromptJpsi: False
     isPromptUpsilon: False
     wantFullRECO: False
-    saveAllNanoContent: False
+    saveAllNanoContent: True
     skip: 0
     mode: 'vbf'
     maxEvents: -1
     wantSummary: True
     reportEvery: 10_000
     lhcRun: 3
-    globaltag: '140X_dataRun3_v20' ## not sure if this works for all 2023
     tag: '2023VBF' ## produced nanoAOD root filename
 
 samples:
