@@ -1,0 +1,165 @@
+common:
+  data:
+    year: 2024
+    isMC: False
+    isSignal: False
+    isMinBias: False
+    isPromptJpsi: False
+    isPromptUpsilon: False
+    wantFullRECO: False
+    saveAllNanoContent: True
+    skip: 0
+    mode: 'vbf'
+    maxEvents: -1
+    wantSummary: True
+    reportEvery: 10_000
+    lhcRun: 3
+    tag: '2024VBF' ## produced nanoAOD root filename
+
+samples:
+  ## 2024-A check this
+  Run2024A0_v1:
+    dataset: /ParkingVBF0/Run2024A-PromptReco-v1/MINIAOD
+  Run2024A1_v1:
+    dataset: /ParkingVBF1/Run2024A-PromptReco-v1/MINIAOD
+  Run2024A2_v1:
+    dataset: /ParkingVBF2/Run2024A-PromptReco-v1/MINIAOD
+  Run2024A3_v1:
+    dataset: /ParkingVBF3/Run2024A-PromptReco-v1/MINIAOD
+  Run2024A4_v1:
+    dataset: /ParkingVBF4/Run2024A-PromptReco-v1/MINIAOD
+  Run2024A5_v1:
+    dataset: /ParkingVBF5/Run2024A-PromptReco-v1/MINIAOD
+  Run2024A6_v1:
+    dataset: /ParkingVBF6/Run2024A-PromptReco-v1/MINIAOD
+  Run2024A7_v1:
+    dataset: /ParkingVBF7/Run2024A-PromptReco-v1/MINIAOD
+
+  ## 2024-B check this
+  Run2024B0_v1:
+    dataset: /ParkingVBF0/Run2024B-PromptReco-v1/MINIAOD
+  Run2024B1_v1:
+    dataset: /ParkingVBF1/Run2024B-PromptReco-v1/MINIAOD
+  Run2024B2_v1:
+    dataset: /ParkingVBF2/Run2024B-PromptReco-v1/MINIAOD
+  Run2024B3_v1:
+    dataset: /ParkingVBF3/Run2024B-PromptReco-v1/MINIAOD
+  Run2024B4_v1:
+    dataset: /ParkingVBF4/Run2024B-PromptReco-v1/MINIAOD
+  Run2024B5_v1:
+    dataset: /ParkingVBF5/Run2024B-PromptReco-v1/MINIAOD
+  Run2024B6_v1:
+    dataset: /ParkingVBF6/Run2024B-PromptReco-v1/MINIAOD
+  Run2024B7_v1:
+    dataset: /ParkingVBF7/Run2024B-PromptReco-v1/MINIAOD
+
+  ## 2024-C check this
+  Run2024C0_MINIv6:
+    dataset: /ParkingVBF0/Run2024C-MINIv6NANOv15-v1/MINIAOD
+  Run2024C1_MINIv6:
+    dataset: /ParkingVBF1/Run2024C-MINIv6NANOv15-v1/MINIAOD
+  Run2024C2_MINIv6:
+    dataset: /ParkingVBF2/Run2024C-MINIv6NANOv15-v1/MINIAOD
+  Run2024C3_MINIv6:
+    dataset: /ParkingVBF3/Run2024C-MINIv6NANOv15-v1/MINIAOD
+  Run2024C4_MINIv6:
+    dataset: /ParkingVBF4/Run2024C-MINIv6NANOv15-v1/MINIAOD
+  Run2024C5_MINIv6:
+    dataset: /ParkingVBF5/Run2024C-MINIv6NANOv15-v1/MINIAOD
+  Run2024C6_MINIv6:
+    dataset: /ParkingVBF6/Run2024C-MINIv6NANOv15-v1/MINIAOD
+  Run2024C7_MINIv6:
+    dataset: /ParkingVBF7/Run2024C-MINIv6NANOv15-v1/MINIAOD
+
+  ## 2024-D
+  Run2024D0_MINIv6:
+    dataset: /ParkingVBF0/Run2024D-MINIv6NANOv15-v1/MINIAOD
+  Run2024D1_MINIv6:
+    dataset: /ParkingVBF1/Run2024D-MINIv6NANOv15-v1/MINIAOD
+  Run2024D2_MINIv6:
+    dataset: /ParkingVBF2/Run2024D-MINIv6NANOv15-v2/MINIAOD ## cautious: v2, not v1
+  Run2024D3_MINIv6:
+    dataset: /ParkingVBF3/Run2024D-MINIv6NANOv15-v1/MINIAOD
+  Run2024D4_MINIv6:
+    dataset: /ParkingVBF4/Run2024D-MINIv6NANOv15-v1/MINIAOD
+  Run2024D5_MINIv6:
+    dataset: /ParkingVBF5/Run2024D-MINIv6NANOv15-v1/MINIAOD
+  Run2024D6_MINIv6:
+    dataset: /ParkingVBF6/Run2024D-MINIv6NANOv15-v1/MINIAOD
+  Run2024D7_MINIv6:
+    dataset: /ParkingVBF7/Run2024D-MINIv6NANOv15-v1/MINIAOD
+  
+  ## 2024-E
+  Run2024E0_MINIv6:
+    dataset: /ParkingVBF0/Run2024E-MINIv6NANOv15-v1/MINIAOD
+  Run2024E1_MINIv6:
+    dataset: /ParkingVBF1/Run2024E-MINIv6NANOv15-v1/MINIAOD
+  Run2024E2_MINIv6:
+    dataset: /ParkingVBF2/Run2024E-MINIv6NANOv15-v1/MINIAOD
+  Run2024E3_MINIv6:
+    dataset: /ParkingVBF3/Run2024E-MINIv6NANOv15-v1/MINIAOD
+  Run2024E4_MINIv6:
+    dataset: /ParkingVBF4/Run2024E-MINIv6NANOv15-v1/MINIAOD
+  Run2024E5_MINIv6:
+    dataset: /ParkingVBF5/Run2024E-MINIv6NANOv15-v1/MINIAOD
+  Run2024E6_MINIv6:
+    dataset: /ParkingVBF6/Run2024E-MINIv6NANOv15-v1/MINIAOD
+  Run2024E7_MINIv6:
+    dataset: /ParkingVBF7/Run2024E-MINIv6NANOv15-v1/MINIAOD
+
+  ## 2024-F
+  Run2024F0_MINIv6:
+    dataset: /ParkingVBF0/Run2024F-MINIv6NANOv15-v3/MINIAOD
+  Run2024F1_MINIv6:
+    dataset: /ParkingVBF1/Run2024F-MINIv6NANOv15-v3/MINIAOD
+  Run2024F2_MINIv6:
+    dataset: /ParkingVBF2/Run2024F-MINIv6NANOv15-v3/MINIAOD
+  Run2024F3_MINIv6:
+    dataset: /ParkingVBF3/Run2024F-MINIv6NANOv15-v3/MINIAOD
+  Run2024F4_MINIv6:
+    dataset: /ParkingVBF4/Run2024F-MINIv6NANOv15-v3/MINIAOD
+  Run2024F5_MINIv6:
+    dataset: /ParkingVBF5/Run2024F-MINIv6NANOv15-v3/MINIAOD
+  Run2024F6_MINIv6:
+    dataset: /ParkingVBF6/Run2024F-MINIv6NANOv15-v4/MINIAOD ## cautious: v4, not v3
+  Run2024F7_MINIv6:
+    dataset: /ParkingVBF7/Run2024F-MINIv6NANOv15-v3/MINIAOD
+
+  ## 2024-G
+  Run2024G0_MINIv6:
+    dataset: /ParkingVBF0/Run2024G-MINIv6NANOv15-v3/MINIAOD
+  Run2024G1_MINIv6:
+    dataset: /ParkingVBF1/Run2024G-MINIv6NANOv15-v4/MINIAOD ## cautious: v4, not v3
+  Run2024G2_MINIv6:
+    dataset: /ParkingVBF2/Run2024G-MINIv6NANOv15-v3/MINIAOD
+  Run2024G3_MINIv6:
+    dataset: /ParkingVBF3/Run2024G-MINIv6NANOv15-v3/MINIAOD
+  Run2024G4_MINIv6:
+    dataset: /ParkingVBF4/Run2024G-MINIv6NANOv15-v4/MINIAOD ## cautious: v4, not v3
+  Run2024G5_MINIv6:
+    dataset: /ParkingVBF5/Run2024G-MINIv6NANOv15-v3/MINIAOD
+  Run2024G6_MINIv6:
+    dataset: /ParkingVBF6/Run2024G-MINIv6NANOv15-v3/MINIAOD
+  Run2024G7_MINIv6:
+    dataset: /ParkingVBF7/Run2024G-MINIv6NANOv15-v3/MINIAOD
+
+  ## 2024-H
+  Run2024H0_MINIv6:
+    dataset: /ParkingVBF0/Run2024H-MINIv6NANOv15-v2/MINIAOD ## cautious: v2, not v3
+  Run2024H1_MINIv6:
+    dataset: /ParkingVBF1/Run2024H-MINIv6NANOv15-v3/MINIAOD
+  Run2024H2_MINIv6:
+    dataset: /ParkingVBF2/Run2024H-MINIv6NANOv15-v3/MINIAOD
+  Run2024H3_MINIv6:
+    dataset: /ParkingVBF3/Run2024H-MINIv6NANOv15-v3/MINIAOD
+  Run2024H4_MINIv6:
+    dataset: /ParkingVBF4/Run2024H-MINIv6NANOv15-v3/MINIAOD
+  Run2024H5_MINIv6:
+    dataset: /ParkingVBF5/Run2024H-MINIv6NANOv15-v3/MINIAOD
+  Run2024H6_MINIv6:
+    dataset: /ParkingVBF6/Run2024H-MINIv6NANOv15-v3/MINIAOD
+  Run2024H7_MINIv6:
+    dataset: /ParkingVBF7/Run2024H-MINIv6NANOv15-v4/MINIAOD ## cautious: v4, not v3
+
+  ## 2024-I
+  ## continue 
