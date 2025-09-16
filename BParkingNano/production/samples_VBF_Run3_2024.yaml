@@ -162,4 +162,42 @@ samples:
     dataset: /ParkingVBF7/Run2024H-MINIv6NANOv15-v4/MINIAOD ## cautious: v4, not v3
 
   ## 2024-I
-  ## continue 
+  Run2024I0_MINIv6_1:
+    dataset: /ParkingVBF0/Run2024I-MINIv6NANOv15-v2/MINIAOD
+  Run2024I0_MINIv6_2:
+    dataset: /ParkingVBF0/Run2024I-MINIv6NANOv15_v2-v2/MINIAOD ## this and above are orthogonal, i.e., different run numbers
+  Run2024I1_MINIv6_1:
+    dataset: /ParkingVBF1/Run2024I-MINIv6NANOv15-v3/MINIAOD
+  Run2024I1_MINIv6_2:
+    dataset: /ParkingVBF1/Run2024I-MINIv6NANOv15_v2-v3/MINIAOD
+  Run2024I2_MINIv6_1:
+    dataset: /ParkingVBF2/Run2024I-MINIv6NANOv15-v3/MINIAOD
+  Run2024I2_MINIv6_2:
+    dataset: /ParkingVBF2/Run2024I-MINIv6NANOv15_v2-v2/MINIAOD
+  Run2024I3_MINIv6_1:
+    dataset: /ParkingVBF3/Run2024I-MINIv6NANOv15-v3/MINIAOD
+  Run2024I3_MINIv6_2:
+    dataset: /ParkingVBF3/Run2024I-MINIv6NANOv15_v2-v2/MINIAOD
+  Run2024I4_MINIv6_1:
+    dataset: /ParkingVBF4/Run2024I-MINIv6NANOv15-v3/MINIAOD
+  Run2024I4_MINIv6_2:
+    dataset: /ParkingVBF4/Run2024I-MINIv6NANOv15_v2-v2/MINIAOD
+  Run2024I5_MINIv6_1:
+    dataset: /ParkingVBF5/Run2024I-MINIv6NANOv15-v2/MINIAOD
+  Run2024I5_MINIv6_2:
+    dataset: /ParkingVBF5/Run2024I-MINIv6NANOv15_v2-v2/MINIAOD
+  Run2024I6_MINIv6_1:
+    dataset: /ParkingVBF6/Run2024I-MINIv6NANOv15-v2/MINIAOD
+  Run2024I6_MINIv6_2:
+    dataset: /ParkingVBF6/Run2024I-MINIv6NANOv15_v2-v2/MINIAOD
+  Run2024I7_MINIv6_1:
+    dataset: /ParkingVBF7/Run2024I-MINIv6NANOv15-v3/MINIAOD
+  Run2024I7_MINIv6_2:
+    dataset: /ParkingVBF7/Run2024I-MINIv6NANOv15_v2-v2/MINIAOD
+
+
+
+
+
+
+
