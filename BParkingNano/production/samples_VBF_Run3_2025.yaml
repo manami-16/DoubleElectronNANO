@@ -1,0 +1,166 @@
+common:
+  data:
+    year: 2025
+    isMC: False
+    isSignal: False
+    isMinBias: False
+    isPromptJpsi: False
+    isPromptUpsilon: False
+    wantFullRECO: False
+    saveAllNanoContent: True
+    skip: 0
+    mode: 'vbf'
+    maxEvents: -1
+    wantSummary: True
+    reportEvery: 10_000
+    lhcRun: 3
+    tag: '2025VBF' ## produced nanoAOD root filename
+
+samples:
+  ## 2025-B
+  Run2025B0:
+    dataset: /ParkingVBF0/Run2025B-PromptReco-v1/MINIAOD
+  Run2025B1:
+    dataset: /ParkingVBF1/Run2025B-PromptReco-v1/MINIAOD
+  Run2025B2:
+    dataset: /ParkingVBF2/Run2025B-PromptReco-v1/MINIAOD
+  Run2025B3:
+    dataset: /ParkingVBF3/Run2025B-PromptReco-v1/MINIAOD
+  Run2025B4:
+    dataset: /ParkingVBF4/Run2025B-PromptReco-v1/MINIAOD
+  Run2025B5:
+    dataset: /ParkingVBF5/Run2025B-PromptReco-v1/MINIAOD
+  Run2025B5:
+    dataset: /ParkingVBF6/Run2025B-PromptReco-v1/MINIAOD
+  Run2025B7:
+    dataset: /ParkingVBF7/Run2025B-PromptReco-v1/MINIAOD
+
+  ## 2025-C
+  Run2025C0_v1:
+    dataset: /ParkingVBF0/Run2025C-PromptReco-v1/MINIAOD
+  Run2025C0_v2:
+    dataset: /ParkingVBF0/Run2025C-PromptReco-v2/MINIAOD
+  Run2025C1_v1:
+    dataset: /ParkingVBF1/Run2025C-PromptReco-v1/MINIAOD
+  Run2025C1_v2:
+    dataset: /ParkingVBF1/Run2025C-PromptReco-v2/MINIAOD
+  Run2025C2_v1:
+    dataset: /ParkingVBF2/Run2025C-PromptReco-v1/MINIAOD
+  Run2025C2_v2:
+    dataset: /ParkingVBF2/Run2025C-PromptReco-v2/MINIAOD
+  Run2025C3_v1:
+    dataset: /ParkingVBF3/Run2025C-PromptReco-v1/MINIAOD
+  Run2025C3_v2:
+    dataset: /ParkingVBF3/Run2025C-PromptReco-v2/MINIAOD
+  Run2025C4_v1:
+    dataset: /ParkingVBF4/Run2025C-PromptReco-v1/MINIAOD
+  Run2025C4_v2:
+    dataset: /ParkingVBF4/Run2025C-PromptReco-v2/MINIAOD
+  Run2025C5_v1:
+    dataset: /ParkingVBF5/Run2025C-PromptReco-v1/MINIAOD
+  Run2025C5_v2:
+    dataset: /ParkingVBF5/Run2025C-PromptReco-v2/MINIAOD
+  Run2025C6_v1:
+    dataset: /ParkingVBF6/Run2025C-PromptReco-v1/MINIAOD
+  Run2025C6_v2:
+    dataset: /ParkingVBF6/Run2025C-PromptReco-v2/MINIAOD
+  Run2025C7_v1:
+    dataset: /ParkingVBF7/Run2025C-PromptReco-v1/MINIAOD
+  Run2025C7_v2:
+    dataset: /ParkingVBF7/Run2025C-PromptReco-v2/MINIAOD
+  
+  ## 2025-D
+  Run2025D0:
+    dataset: /ParkingVBF0/Run2025D-PromptReco-v1/MINIAOD
+  Run2025D1:
+    dataset: /ParkingVBF1/Run2025D-PromptReco-v1/MINIAOD
+  Run2025D2:
+    dataset: /ParkingVBF2/Run2025D-PromptReco-v1/MINIAOD
+  Run2025D3:
+    dataset: /ParkingVBF3/Run2025D-PromptReco-v1/MINIAOD
+  Run2025D4:
+    dataset: /ParkingVBF4/Run2025D-PromptReco-v1/MINIAOD
+  Run2025D5:
+    dataset: /ParkingVBF5/Run2025D-PromptReco-v1/MINIAOD
+  Run2025D5:
+    dataset: /ParkingVBF6/Run2025D-PromptReco-v1/MINIAOD
+  Run2025D7:
+    dataset: /ParkingVBF7/Run2025D-PromptReco-v1/MINIAOD
+
+  ## 2025-E
+  Run2025E0:
+    dataset: /ParkingVBF0/Run2025E-PromptReco-v1/MINIAOD
+  Run2025E1:
+    dataset: /ParkingVBF1/Run2025E-PromptReco-v1/MINIAOD
+  Run2025E2:
+    dataset: /ParkingVBF2/Run2025E-PromptReco-v1/MINIAOD
+  Run2025E3:
+    dataset: /ParkingVBF3/Run2025E-PromptReco-v1/MINIAOD
+  Run2025E4:
+    dataset: /ParkingVBF4/Run2025E-PromptReco-v1/MINIAOD
+  Run2025E5:
+    dataset: /ParkingVBF5/Run2025E-PromptReco-v1/MINIAOD
+  Run2025E5:
+    dataset: /ParkingVBF6/Run2025E-PromptReco-v1/MINIAOD
+  Run2025E7:
+    dataset: /ParkingVBF7/Run2025E-PromptReco-v1/MINIAOD
+
+  ## 2025-F
+  Run2025F0:
+    dataset: /ParkingVBF0/Run2025F-PromptReco-v1/MINIAOD
+  Run2025F1:
+    dataset: /ParkingVBF1/Run2025F-PromptReco-v1/MINIAOD
+  Run2025F2:
+    dataset: /ParkingVBF2/Run2025F-PromptReco-v1/MINIAOD
+  Run2025F3:
+    dataset: /ParkingVBF3/Run2025F-PromptReco-v1/MINIAOD
+  Run2025F4:
+    dataset: /ParkingVBF4/Run2025F-PromptReco-v1/MINIAOD
+  Run2025F5:
+    dataset: /ParkingVBF5/Run2025F-PromptReco-v1/MINIAOD
+  Run2025F5:
+    dataset: /ParkingVBF6/Run2025F-PromptReco-v1/MINIAOD
+  Run2025F7:
+    dataset: /ParkingVBF7/Run2025F-PromptReco-v1/MINIAOD
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
