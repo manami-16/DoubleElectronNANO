@@ -1,12 +1,24 @@
 common:
   data:
-    splitting: 20
-    globaltag: 130X_dataRun3_PromptAnalysis_v1
-    lumimask: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions23/Cert_Collisions2023_366442_370790_Golden.json
-  mc:
-    splitting: 1
-    globaltag: 130X_mcRun3_2023_realistic_v14
+    year: 2023
+    isSignal: False
+    isMinBias: False
+    isPromptJpsi: False
+    isPromptUpsilon: False
+    wantFullRECO: False
+    saveAllNanoContent: True
+    skip: 0
+    mode: 'reco'
+    maxEvents: -1
+    wantSummary: True
+    reportEvery: 10_000
+    lhcRun: 3
+    tag: '2023Inclusive' ## produced nanoAOD root filename
+
 samples:
+  Run2023Bv1:
+    dataset: /ParkingDoubleElectronLowMass/Run2023B-22Sep2023-v1/MINIAOD
+    isMC: False
   Run2023Cv1:
     dataset: /ParkingDoubleElectronLowMass/Run2023C-22Sep2023_v1-v1/MINIAOD
     isMC: False
@@ -16,19 +28,19 @@ samples:
   Run2023Cv3:
     dataset: /ParkingDoubleElectronLowMass/Run2023C-22Sep2023_v3-v1/MINIAOD
     isMC: False
-  Run2023Cv4:
-    dataset: /ParkingDoubleElectronLowMass/Run2023C-22Sep2023_v4-v1/MINIAOD
-    isMC: False
   Run2023Dv1:
     dataset: /ParkingDoubleElectronLowMass/Run2023D-22Sep2023_v1-v1/MINIAOD
     isMC: False
   Run2023Dv2:
     dataset: /ParkingDoubleElectronLowMass/Run2023D-22Sep2023_v2-v1/MINIAOD
     isMC: False
+
+
+  ## MC
   BuToKJpsi_Toee_2023preBPix:
     dataset: /BuToKJPsi_JPsiToEE_SoftQCD_TuneCP5_13p6TeV_pythia8-evtgen/Run3Summer23MiniAODv4-130X_mcRun3_2023_realistic_v14-v3/MINIAODSIM
     isMC: True
-    dbs: global
+    globaltag: 130X_mcRun3_2023_realistic_v14
   BuToKJpsi_Toee_2023BPix:
     dataset: /BuToKJPsi_JPsiToEE_SoftQCD_TuneCP5_13p6TeV_pythia8-evtgen/Run3Summer23BPixMiniAODv4-130X_mcRun3_2023_realistic_postBPix_v2-v3/MINIAODSIM
     isMC: True
@@ -74,18 +86,47 @@ samples:
     isMC: True
     globaltag: 130X_mcRun3_2023_realistic_postBPix_v6
     dbs: global
+
+  ## Signal Samples
+  ## https://dpee.docs.cern.ch/Samples/signal/#inclusive-production
+  HAHM_13p6TeV_M6p5:
+    dataset: /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024
+    isMC: True
+    userInputFiles:
+      - /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/HAHM_ZpToEE_M6p5_VBF_INCLUSIVE_Leta1p22_LpT5_k1e_10_eps0p02_13p6TeV_MINIAOD.root
+
+  HAHM_13p6TeV_M6:
+    dataset: /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024
+    isMC: True
+    userInputFiles:
+      - /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/HAHM_ZpToEE_M6_VBF_INCLUSIVE_Leta1p22_LpT5_k1e_10_eps0p02_13p6TeV_MINIAOD.root
+
+  HAHM_13p6TeV_M5p5:
+    dataset: /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024
+    isMC: True
+    userInputFiles:
+      - /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/HAHM_ZpToEE_M5p5_VBF_INCLUSIVE_noVBFcuts_Leta1p22_LpT5_k1e_10_eps0p02_13p6TeV_MINIAOD.root
+
   HAHM_13p6TeV_M5:
     dataset: /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024
     isMC: True
     userInputFiles:
       - /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/HAHM_ZpTEE_012jets_VBF_INCLUSIVE_noVBFcuts_Leta1p22_LpT5_M5_k1e_10_eps0p02_13p6TeV_MINIAOD.root
+  
   HAHM_13p6TeV_M3p1:
     dataset: /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024
     isMC: True
     userInputFiles:
       - /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/HAHM_ZpToEE_M3p1_012jets_Leta1p22_LpT5_k1e_10_eps0p02_136TeV_MINIAOD.job0.root
+  
   HAHM_13p6TeV_M1:
     dataset: /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024
     isMC: True
     userInputFiles:
       - /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/HAHM_ZpTEE_M1_012jets_Leta1p22_LpT5_k1e_10_eps0p02_13P6TeV_MINIAOD.root
+
+
+
+
+
+
