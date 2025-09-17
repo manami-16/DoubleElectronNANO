@@ -1,0 +1,239 @@
+common:
+  data:
+    year: 2022
+    isSignal: False
+    isPromptJpsi: False
+    isPromptUpsilon: False
+    wantFullRECO: False
+    saveAllNanoContent: True
+    skip: 0
+    mode: 'reco'
+    maxEvents: -1
+    wantSummary: True
+    reportEvery: 10_000
+    lhcRun: 3
+    tag: '2022Inclusive' ## produced nanoAOD root filename
+
+samples:
+  ## 2022-C
+  Run2022Cv0:
+    dataset: /ParkingDoubleElectronLowMass0/Run2022C-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Cv1:
+    dataset: /ParkingDoubleElectronLowMass1/Run2022C-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Cv2:
+    dataset: /ParkingDoubleElectronLowMass2/Run2022C-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Cv3:
+    dataset: /ParkingDoubleElectronLowMass3/Run2022C-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Cv4:
+    dataset: /ParkingDoubleElectronLowMass3/Run2022C-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Cv5:
+    dataset: /ParkingDoubleElectronLowMass5/Run2022C-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  
+  ## 2022-D
+  Run2022Dv0:
+    dataset: /ParkingDoubleElectronLowMass0/Run2022D-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Dv1:
+    dataset: /ParkingDoubleElectronLowMass1/Run2022D-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Dv2:
+    dataset: /ParkingDoubleElectronLowMass2/Run2022D-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Dv3:
+    dataset: /ParkingDoubleElectronLowMass3/Run2022D-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Dv4:
+    dataset: /ParkingDoubleElectronLowMass4/Run2022D-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Dv5:
+    dataset: /ParkingDoubleElectronLowMass5/Run2022D-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+
+  ## 2022-E
+  Run2022Ev0:
+    dataset: /ParkingDoubleElectronLowMass0/Run2022E-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Ev1:
+    dataset: /ParkingDoubleElectronLowMass1/Run2022E-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Ev2:
+    dataset: /ParkingDoubleElectronLowMass2/Run2022E-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Ev3:
+    dataset: /ParkingDoubleElectronLowMass3/Run2022E-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Ev4:
+    dataset: /ParkingDoubleElectronLowMass4/Run2022E-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Ev5:
+    dataset: /ParkingDoubleElectronLowMass5/Run2022E-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+
+  ## 2022-F
+  Run2022Fv0:
+    dataset: /ParkingDoubleElectronLowMass0/Run2022F-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Fv1:
+    dataset: /ParkingDoubleElectronLowMass1/Run2022F-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Fv2:
+    dataset: /ParkingDoubleElectronLowMass2/Run2022F-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Fv3:
+    dataset: /ParkingDoubleElectronLowMass3/Run2022F-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Fv4:
+    dataset: /ParkingDoubleElectronLowMass4/Run2022F-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Fv5:
+    dataset: /ParkingDoubleElectronLowMass5/Run2022F-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+
+  ## 2022-G
+  Run2022Gv0:
+    dataset: /ParkingDoubleElectronLowMass0/Run2022G-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Gv1:
+    dataset: /ParkingDoubleElectronLowMass1/Run2022G-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Gv2:
+    dataset: /ParkingDoubleElectronLowMass2/Run2022G-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Gv3:
+    dataset: /ParkingDoubleElectronLowMass3/Run2022G-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Gv4:
+    dataset: /ParkingDoubleElectronLowMass4/Run2022G-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+  Run2022Gv5:
+    dataset: /ParkingDoubleElectronLowMass5/Run2022G-10Dec2022-v2/MINIAOD
+    isMC: False
+    isMinBias: False
+
+
+  ## MC
+  BuToKJpsi_Toee_2022preEE_v5:
+    dataset: /BuToKJPsi_JPsiToEE_SoftQCD_TuneCP5_13p6TeV_pythia8-evtgen/Run3Summer22MiniAODv4-130X_mcRun3_2022_realistic_v5-v2/MINIAODSIM
+    isMC: True
+    dbs: global
+    isMinBias: False
+    subera: 0
+  BuToKJpsi_Toee_2022preEE_v12:
+    dataset: /BuToKJPsi_JPsiToEE_SoftQCD_TuneCP5_13p6TeV_pythia8-evtgen/Run3Summer22MiniAODv3-124X_mcRun3_2022_realistic_v12-v2/MINIAODSIM
+    isMC: True
+    dbs: global
+    isMinBias: False
+    subera: 0
+  BuToKJpsi_Toee_2022postEE_v6:
+    dataset: /BuToKJPsi_JPsiToEE_SoftQCD_TuneCP5_13p6TeV_pythia8-evtgen/Run3Summer22EEMiniAODv4-130X_mcRun3_2022_realistic_postEE_v6-v2/MINIAODSIM
+    isMC: True
+    globaltag: 130X_mcRun3_2022_realistic_postEE_v6
+    dbs: global
+    isMinBias: False
+    subera: 1
+  BuToKJpsi_Toee_2022postEE_v2:
+    dataset: /BuToKJPsi_JPsiToEE_SoftQCD_TuneCP5_13p6TeV_pythia8-evtgen/Run3Summer22EEMiniAODv3-124X_mcRun3_2022_realistic_postEE_v1-v2/MINIAODSIM
+    isMC: True
+    globaltag: 130X_mcRun3_2022_realistic_postEE_v6
+    dbs: global
+    isMinBias: False
+    subera: 1
+  JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8_2022preEE:
+    dataset: /JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/Run3Summer22MiniAODv4-130X_mcRun3_2022_realistic_v5-v3/MINIAODSIM
+    isMC: True
+    globaltag: 130X_mcRun3_2022_realistic_v5
+    dbs: global
+    isMinBias: False
+    subera: 0
+  JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8_2022postEE:
+    dataset: /JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/Run3Summer22EEMiniAODv4-130X_mcRun3_2022_realistic_postEE_v6-v3/MINIAODSIM
+    isMC: True
+    globaltag: 130X_mcRun3_2022_realistic_postEE_v6
+    dbs: global
+    isMinBias: False
+    subera: 1
+  PsiToEE_pth10toInf_TuneCP5_13p6TeV_pythia8_2022preEE:
+    dataset: /JPsiToEE_pth10toInf_TuneCP5_13p6TeV_pythia8/Run3Summer22MiniAODv4-130X_mcRun3_2022_realistic_v5-v3/MINIAODSIM
+    isMC: True
+    globaltag: 130X_mcRun3_2022_realistic_v5
+    dbs: global
+    isMinBias: False
+    subera: 0
+  JPsiToEE_pth10toInf_TuneCP5_13p6TeV_pythia8_2022postEE:
+    dataset: /JPsiToEE_pth10toInf_TuneCP5_13p6TeV_pythia8/Run3Summer22EEMiniAODv4-130X_mcRun3_2022_realistic_postEE_v6-v3/MINIAODSIM
+    isMC: True
+    globaltag: 130X_mcRun3_2022_realistic_postEE_v6
+    dbs: global
+    isMinBias: False
+    subera: 1
+  UpsilonToEE_pth0to10_TuneCP5_13p6TeV_pythia8_2022preEE:
+    dataset: /UpsilonToEE_pth0to10_TuneCP5_13p6TeV_pythia8/Run3Summer22MiniAODv4-130X_mcRun3_2022_realistic_v5-v2/MINIAODSIM
+    isMC: True
+    globaltag: 130X_mcRun3_2022_realistic_v5
+    dbs: global
+    isMinBias: False
+    subera: 0
+  UpsilonToEE_pth0to10_TuneCP5_13p6TeV_pythia8_2022postEE:
+    dataset: /UpsilonToEE_pth0to10_TuneCP5_13p6TeV_pythia8/Run3Summer22EEMiniAODv4-130X_mcRun3_2022_realistic_postEE_v6-v2/MINIAODSIM
+    isMC: True
+    globaltag: 130X_mcRun3_2022_realistic_postEE_v6
+    dbs: global
+    isMinBias: False
+    subera: 1
+  UpsilonToEE_pth10toInf_TuneCP5_13p6TeV_pythia8_2022preEE:
+    dataset: /UpsilonToEE_pth10toInf_TuneCP5_13p6TeV_pythia8/Run3Summer22MiniAODv4-130X_mcRun3_2022_realistic_v5-v2/MINIAODSIM
+    isMC: True
+    globaltag: 130X_mcRun3_2022_realistic_v5
+    dbs: global
+    isMinBias: False
+    subera: 0
+  UpsilonToEE_pth10toInf_TuneCP5_13p6TeV_pythia8_2022postEE:
+    dataset: /UpsilonToEE_pth10toInf_TuneCP5_13p6TeV_pythia8/Run3Summer22EEMiniAODv4-130X_mcRun3_2022_realistic_postEE_v6-v2/MINIAODSIM
+    isMC: True
+    globaltag: 130X_mcRun3_2022_realistic_postEE_v6
+    dbs: global
+    isMinBias: False
+    subera: 1
+
+  ## minBias MC
+  InclusiveDileptonMinBias:
+    dataset: /InclusiveDileptonMinBias_TuneCP5Plus_13p6TeV_pythia8/Run3Summer22MiniAODv4-validDigi_130X_mcRun3_2022_realistic_v5-v4/MINIAODSIM
+    isMC: True
+    globaltag: 130X_mcRun3_2022_realistic_v5
+    dbs: global
+    isMinBias: True
