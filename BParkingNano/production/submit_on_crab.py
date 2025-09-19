@@ -15,7 +15,7 @@ config.General.workArea = 'DoubleElectronNANO_{:s}'.format(production_tag)
 
 config.section_('Data')
 config.Data.publication = False
-config.Data.outLFNDirBase = '/store/group/cmst3/group/xee'
+# config.Data.outLFNDirBase = '/store/group/cmst3/group/xee' ## By default, /store/user//
 
 config.Data.inputDBS = 'global'
 
@@ -46,7 +46,7 @@ if __name__ == '__main__':
           print("Failed submitting task:",cle)
 
   parser = ArgumentParser()
-  parser.add_argument('-y', '--yaml', default = 'samples_VBF_Run3_2023.yml', help = 'File with dataset descriptions')
+  parser.add_argument('-y', '--yaml', default = 'BParkingNano/production/samples_VBF_Run3_2023.yml', help = 'File with dataset descriptions')
   parser.add_argument('-f', '--filter', default='*', help = 'filter samples, POSIX regular expressions allowed')
   parser.add_argument('-r', '--lhcRun', type=int, default=3, help = 'Run 2 or 3 (default)')
   parser.add_argument('-yy', '--year', type=int, default=2023, help = 'Year of the dataset')
@@ -62,19 +62,19 @@ if __name__ == '__main__':
 
     # loop over samples
     for sample, info in doc['samples'].items():
-      # Input DBS
-      input_dbs = info['dbs'] if 'dbs' in info else None
-      isMC = info['isMC']
-      config.Data.inputDBS = input_dbs if input_dbs is not None else 'global'
-      config.Data.inputDataset = info['dataset']
-      print(f'submitting -- {sample}')
-      config.General.requestName = sample
+        # Input DBS
+        input_dbs = info['dbs'] if 'dbs' in info else None
+        isMC = info['isMC']
+        config.Data.inputDBS = input_dbs if input_dbs is not None else 'global'
+        config.Data.inputDataset = info['dataset']
+        print(f'submitting -- {sample}')
+        config.General.requestName = sample
 
 
 
 
       #### resume below ###
-      common_branch = 'mc' if isMC else 'data'
+        common_branch = 'mc' if isMC else 'data'
         config.Data.splitting = 'FileBased' if isMC else 'LumiBased'
         if not isMC:
             config.Data.lumiMask = info.get(
@@ -84,10 +84,13 @@ if __name__ == '__main__':
         else:
             config.Data.lumiMask = ''
 
+
+    ####################
         config.Data.unitsPerJob = info.get(
             'splitting',
             common[common_branch].get('splitting', None)
         )
+
         globaltag = info.get(
             'globaltag',
             common[common_branch].get('globaltag', None)
@@ -97,7 +100,7 @@ if __name__ == '__main__':
             'isMC={:.0f}'.format(int(isMC)),
             'reportEvery=1000',
             'tag={:s}'.format(production_tag),
-            'globalTag={:s}'.format(globaltag),
+            # 'globalTag={:s}'.format(globaltag), This is set in run_nano_cfg.py
             'lhcRun={:.0f}'.format(args.lhcRun),
             'year={:.0f}'.format(args.year),
             'mode={:s}'.format(args.mode),
@@ -121,11 +124,12 @@ if __name__ == '__main__':
         output_flags.append(production_tag)
 
         config.JobType.outputFiles = ['_'.join(output_flags)+'.root']
-        config.Data.outLFNDirBase = '/store/group/cmst3/group/xee'
+        # config.Data.outLFNDirBase = '/store/group/cmst3/group/xee'
+        config.Data.outLFNDirBase = '/eos/user/m/mkanemur/WebEOS/test_crab' ## test
 
-        if "HAHM" in name:
+        if "HAHM" in sample:
             config.Data.outLFNDirBase += '/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024'
-        elif "Run20" in name:
+        elif "Run20" in sample:
             config.Data.outLFNDirBase += '/data'
         else:
             config.Data.outLFNDirBase += '/backgroundSamples'
