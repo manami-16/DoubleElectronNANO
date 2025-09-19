@@ -70,22 +70,18 @@ if __name__ == '__main__':
         print(f'submitting -- {sample}')
         config.General.requestName = sample
 
-
-
-
-      #### resume below ###
-        common_branch = 'mc' if isMC else 'data'
+        ########################
         config.Data.splitting = 'FileBased' if isMC else 'LumiBased'
         if not isMC:
             config.Data.lumiMask = info.get(
-                'lumimask',
-                common[common_branch].get('lumimask', None)
+                'lumimask', None
             )
         else:
             config.Data.lumiMask = ''
 
+        ########################
 
-    ####################
+
         config.Data.unitsPerJob = info.get(
             'splitting',
             common[common_branch].get('splitting', None)
