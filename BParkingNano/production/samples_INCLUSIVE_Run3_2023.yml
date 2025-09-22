@@ -15,32 +15,27 @@ common:
     lhcRun: 3
     tag: '2023Inclusive' ## produced nanoAOD root filename
     dbs: global
+    lumiMask: 'https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions23/Cert_Collisions2023_366442_370790_Golden.json'
 
 samples:
   Run2023Bv1:
     dataset: /ParkingDoubleElectronLowMass/Run2023B-22Sep2023-v1/MINIAOD
     isMC: False
-    lumiMask: 'https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions23/Cert_Collisions2023_eraB_366403_367079_Golden.json'
   Run2023Cv1:
     dataset: /ParkingDoubleElectronLowMass/Run2023C-22Sep2023_v1-v1/MINIAOD
     isMC: False
-    lumiMask: 'https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions23/Cert_Collisions2023_eraC_367095_368823_Golden.json'
   Run2023Cv2:
     dataset: /ParkingDoubleElectronLowMass/Run2023C-22Sep2023_v2-v1/MINIAOD
     isMC: False
-    lumiMask: 'https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions23/Cert_Collisions2023_eraC_367095_368823_Golden.json'
   Run2023Cv3:
     dataset: /ParkingDoubleElectronLowMass/Run2023C-22Sep2023_v3-v1/MINIAOD
     isMC: False
-    lumiMask: 'https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions23/Cert_Collisions2023_eraC_367095_368823_Golden.json'
   Run2023Dv1:
     dataset: /ParkingDoubleElectronLowMass/Run2023D-22Sep2023_v1-v1/MINIAOD
     isMC: False
-    lumiMask: 'https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions23/Cert_Collisions2023_eraD_369803_370790_Golden.json'
   Run2023Dv2:
     dataset: /ParkingDoubleElectronLowMass/Run2023D-22Sep2023_v2-v1/MINIAOD
     isMC: False
-    lumiMask: 'https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions23/Cert_Collisions2023_eraD_369803_370790_Golden.json'
 
   ## MC
   BuToKJpsi_Toee_2023preBPix:

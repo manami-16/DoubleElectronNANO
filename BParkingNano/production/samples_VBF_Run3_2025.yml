@@ -15,6 +15,7 @@ common:
     reportEvery: 10_000
     lhcRun: 3
     tag: '2025VBF' ## produced nanoAOD root filename
+    lumiMask: '' ## not posted yet in https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions25/
 
 samples:
   ## 2025-B

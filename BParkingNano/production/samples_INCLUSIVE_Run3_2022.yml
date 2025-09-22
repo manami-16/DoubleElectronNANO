@@ -13,6 +13,7 @@ common:
     reportEvery: 10_000
     lhcRun: 3
     tag: '2022Inclusive' ## produced nanoAOD root filename
+    lumimask: 'https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json'
 
 samples:
   ## 2022-C
