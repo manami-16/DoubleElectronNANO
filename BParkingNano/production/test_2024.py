@@ -84,8 +84,8 @@ options.parseArguments()
 
 #!TEST
 options.isMC = 0
-options.reportEvery = 5000
-options.tag = '2025Sep8_2files'
+options.reportEvery = 1000
+options.tag = '2025Sep10_test'
 options.globalTag = '140X_dataRun3_v20'
 options.lhcRun = 3
 options.year = 2024

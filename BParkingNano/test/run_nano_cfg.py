@@ -276,7 +276,8 @@ elif options.mode == "vbf":
     if options.year == 2022:
         raise ValueError("VBF mode is not supported for 2022 data")
     elif options.year == 2023:
-        raise NotImplementedError("VBF mode is not implemented for 2023 data yet")
+        modifiers.append(vbfSkimming2024)
+        # raise NotImplementedError("VBF mode is not implemented for 2023 data yet")
     elif options.year == 2024:
         modifiers.append(vbfSkimming2024)
 
