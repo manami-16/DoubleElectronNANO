@@ -15,13 +15,13 @@ config.General.workArea = 'DoubleElectronNANO_{:s}'.format(production_tag)
 
 config.section_('Data')
 config.Data.publication = False
-# config.Data.outLFNDirBase = '/store/group/cmst3/group/xee' ## By default, /store/user//
+# config.Data.outLFNDirBase = '/store/group/cmst3/group/xee' ## Have not gotten the w-access
 
 config.Data.inputDBS = 'global'
 
 config.section_('JobType')
 config.JobType.pluginName = 'Analysis'
-config.JobType.psetName = '../test/run_nano_cfg.py'
+config.JobType.psetName = 'BParkingNano/test/run_nano_cfg.py'
 config.JobType.maxJobRuntimeMin = 3000
 config.JobType.maxMemoryMB = 3500
 config.JobType.allowUndistributedCMSSW = True
@@ -65,36 +65,28 @@ if __name__ == '__main__':
         # Input DBS
         input_dbs = info['dbs'] if 'dbs' in info else None
         isMC = info['isMC']
+
         config.Data.inputDBS = input_dbs if input_dbs is not None else 'global'
         config.Data.inputDataset = info['dataset']
         print(f'submitting -- {sample}')
         config.General.requestName = sample
 
-        ########################
         config.Data.splitting = 'FileBased' if isMC else 'LumiBased'
         if not isMC:
-            config.Data.lumiMask = info.get(
-                'lumimask', None
-            )
+            config.Data.lumiMask = common['data']['lumiMask']
         else:
             config.Data.lumiMask = ''
 
-        ########################
+        config.Data.unitsPerJob = common['data']['splitting']
 
-
-        config.Data.unitsPerJob = info.get(
-            'splitting',
-            common[common_branch].get('splitting', None)
-        )
-
-        globaltag = info.get(
-            'globaltag',
-            common[common_branch].get('globaltag', None)
-        )
+        # globaltag = info.get(
+        #     'globaltag',
+        #     common[common_branch].get('globaltag', None)
+        # )
 
         config.JobType.pyCfgParams = [
             'isMC={:.0f}'.format(int(isMC)),
-            'reportEvery=1000',
+            'reportEvery=5000',
             'tag={:s}'.format(production_tag),
             # 'globalTag={:s}'.format(globaltag), This is set in run_nano_cfg.py
             'lhcRun={:.0f}'.format(args.lhcRun),
