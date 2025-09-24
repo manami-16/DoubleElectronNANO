@@ -151,6 +151,20 @@ triggerMatchingStudy.toModify(hltHighLevel,
     HLTPaths = cms.vstring([]) # disable HLT selection
 )
 
+vbfSkimming2023.toModify(hltHighLevel,
+    HLTPaths = cms.vstring(
+        [ f"{p}_v*" for p in [
+        'HLT_VBF_DiPFJet105_40_Mjj1000_Detajj3p5',
+        'HLT_VBF_DiPFJet110_40_Mjj1000_Detajj3p5',
+        'HLT_VBF_DiPFJet125_45_Mjj1000_Detajj3p5',
+        'HLT_VBF_DiPFJet125_45_Mjj720_Detajj3p0',
+        'HLT_VBF_DiPFJet45_Mjj500_Detajj2p5_Photon12',
+        'HLT_VBF_DiPFJet50_Mjj500_Detajj2p5_Photon22',
+        'HLT_VBF_DiPFJet45_Mjj500_Detajj2p5_Ele12_eta2p1_WPTight_Gsf',
+        'HLT_VBF_DiPFJet50_Mjj500_Detajj2p5_Ele22_eta2p1_WPTight_Gsf',
+        ]]
+    )
+)
 vbfSkimming2024.toModify(hltHighLevel,
     HLTPaths = cms.vstring(
         [ f"{p}_v*" for p in [
@@ -159,7 +173,7 @@ vbfSkimming2024.toModify(hltHighLevel,
         'HLT_VBF_DiPFJet50_Mjj600_Ele22_eta2p1_WPTight_Gsf',
         'HLT_VBF_DiPFJet50_Mjj650_Ele22_eta2p1_WPTight_Gsf',
         'HLT_VBF_DiPFJet50_Mjj650_Photon22',
-        'HLT_VBF_DiPFJet50_Mjj750_Photon22'
+        'HLT_VBF_DiPFJet50_Mjj750_Photon22',
         ]]
     )
 )
