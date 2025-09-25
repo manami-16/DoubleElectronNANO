@@ -88,7 +88,12 @@ options.register("saveRegressionVars", False,
     VarParsing.varType.bool,
     "Add regression variables to the output")
 
-options.setDefault('maxEvents', 100)
+options.register('version', 'A',
+    VarParsing.multiplicity.singleton,
+    VarParsing.varType.string,
+    "RUN version - A, B, C, D, etc")
+
+options.setDefault('maxEvents', -1)
 options.setDefault('tag', '150X')
 
 options.parseArguments()
@@ -98,6 +103,7 @@ globaltag = None
 if options.year==2022:
     globaltag='auto:phase1_2022_realistic' if options.subera==0 else 'auto:phase1_2022_realistic_postEE'
 if options.year==2023:
+    # globaltag = "130X_mcRun3_2023_realistic_postBPix_v2" if options.isMC else "130X_dataRun3_PromptAnalysis_v1"
     globaltag='auto:phase1_2023_realistic' if options.subera==0 else 'auto:phase1_2023_realistic_postBPix'
 if options.year==2024:
     globaltag='auto:phase1_2024_realistic'
@@ -276,8 +282,10 @@ elif options.mode == "vbf":
     if options.year == 2022:
         raise ValueError("VBF mode is not supported for 2022 data")
     elif options.year == 2023:
-        modifiers.append(vbfSkimming2023)
-        # raise NotImplementedError("VBF mode is not implemented for 2023 data yet")
+        if options.version == 'C':
+            modifiers.append(vbfSkimming2023_C)
+        else:
+            modifiers.append(vbfSkimming2023_D)
     elif options.year == 2024:
         modifiers.append(vbfSkimming2024)
 

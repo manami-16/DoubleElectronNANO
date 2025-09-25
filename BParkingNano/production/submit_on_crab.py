@@ -15,7 +15,7 @@ config.General.workArea = 'DoubleElectronNANO_{:s}'.format(production_tag)
 
 config.section_('Data')
 config.Data.publication = False
-# config.Data.outLFNDirBase = '/store/group/cmst3/group/xee' ## Have not gotten the w-access
+config.Data.outLFNDirBase = '/store/group/cmst3/group/xee' ## Have not gotten the w-access
 
 config.Data.inputDBS = 'global'
 
@@ -28,6 +28,7 @@ config.JobType.allowUndistributedCMSSW = True
 
 config.section_('User')
 config.section_('Site')
+# config.Site.storageSite = 'T3_US_CMU'
 config.Site.storageSite = 'T2_CH_CERN'
 
 if __name__ == '__main__':
@@ -65,9 +66,11 @@ if __name__ == '__main__':
         # Input DBS
         input_dbs = info['dbs'] if 'dbs' in info else None
         isMC = info['isMC']
+        version = info['version'] if 'version' in info else 'Z'
 
         config.Data.inputDBS = input_dbs if input_dbs is not None else 'global'
         config.Data.inputDataset = info['dataset']
+
         print(f'submitting -- {sample}')
         config.General.requestName = sample
 
@@ -94,6 +97,7 @@ if __name__ == '__main__':
             'mode={:s}'.format(args.mode),
             'saveAllNanoContent={:.0f}'.format(int(args.saveAllNanoContent)),
             'saveRegressionVars={:.0f}'.format(int(args.saveRegressionVars)),
+            'version={:s}'.format(version)
         ]
 
         ext1 = {False:'data', True:'mc'}
@@ -112,8 +116,8 @@ if __name__ == '__main__':
         output_flags.append(production_tag)
 
         config.JobType.outputFiles = ['_'.join(output_flags)+'.root']
-        # config.Data.outLFNDirBase = '/store/group/cmst3/group/xee'
-        config.Data.outLFNDirBase = '/eos/user/m/mkanemur/WebEOS/test_crab' ## test
+        config.Data.outLFNDirBase = '/store/group/cmst3/group/xee'
+        # config.Data.outLFNDirBase = '/store/user/mkanemur/LowPT' ## test
 
         if "HAHM" in sample:
             config.Data.outLFNDirBase += '/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024'
@@ -141,4 +145,7 @@ if __name__ == '__main__':
     print("Do you want to submit all task? (y/n)")
     if input().strip().lower() == 'y':
         for c in configs:
+            # p = Process(target = submit, args=(c,))
+            # p.start()
+            # p.join()
             submit(c)
