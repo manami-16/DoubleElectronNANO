@@ -23,7 +23,8 @@ finalGenParticlesBPark = finalGenParticles.clone(
 )
 
 genParticleBParkTable = genParticleTable.clone(
-  src = cms.InputTag("finalGenParticlesBPark"),
+  src = cms.InputTag("finalGenParticles"),
+  # src = cms.InputTag("finalGenParticlesBPark"), # FIXME
   variables = cms.PSet(
       genParticleTable.variables,
       vx = Var("vx()", float, doc="x coordinate of the production vertex position, in cm", precision=10),

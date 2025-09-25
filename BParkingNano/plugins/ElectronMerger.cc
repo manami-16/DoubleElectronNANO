@@ -26,6 +26,14 @@
 #include "ConversionInfo.h"
 #include "CommonTools/Egamma/interface/EffectiveAreas.h"
 
+// for regression variables
+#include "DataFormats/EcalDetId/interface/EBDetId.h"
+#include "DataFormats/EcalDetId/interface/EEDetId.h"
+#include "DataFormats/EcalDetId/interface/EcalSubdetector.h"
+#include "Geometry/Records/interface/CaloTopologyRecord.h"
+#include "Geometry/Records/interface/CaloGeometryRecord.h"
+#include "EgammaAnalysis/ElectronTools/interface/SuperClusterHelper.h"
+
 #include <limits>
 #include <algorithm>
 #include "helper.h"
@@ -40,6 +48,8 @@ public:
 
   explicit ElectronMerger(const edm::ParameterSet &cfg):
     ttbToken_(esConsumes(edm::ESInputTag{"","TransientTrackBuilder"})),
+    ecalTopologyToken_(esConsumes()),
+    caloGeometryToken_(esConsumes()),
     triggerLeptons_{ consumes<edm::View<reco::Candidate> >( cfg.getParameter<edm::InputTag>("trgLepton") )},
     triggerBits_{consumes<edm::TriggerResults>(cfg.getParameter<edm::InputTag>("trgBits"))},
     lowpt_src_{consumes<pat::ElectronCollection>( cfg.getParameter<edm::InputTag>("lowptSrc") )},
@@ -70,19 +80,27 @@ public:
     saveLowPtE_{cfg.getParameter<bool>("saveLowPtE")},
     filterEle_{cfg.getParameter<bool>("filterEle")},
     addUserVarsExtra_{cfg.getParameter<bool>("addUserVarsExtra")},
-    efficiencyStudy_{cfg.getParameter<bool>("efficiencyStudy")}
+    efficiencyStudy_{cfg.getParameter<bool>("efficiencyStudy")},
+    saveRegressionVars_{cfg.getParameter<bool>("saveRegressionVars")}
     {
       produces<pat::ElectronCollection>("SelectedElectrons");
       produces<TransientTrackCollection>("SelectedTransientElectrons");
       if ( !pf_mvaId_src_Tag_.label().empty() ) {
         pf_mvaId_src_ = consumes<edm::ValueMap<float> > ( cfg.getParameter<edm::InputTag>("pfmvaId") );
       }
+      if ( !pf_mvaIdcustom_src_Tag_.label().empty() ) {
+        pf_mvaIdcustom_src_ = consumes<edm::ValueMap<float> > ( cfg.getParameter<edm::InputTag>("pfmvaIdcustom") );
+      }  
       if ( !pf_mvaId_src_Tag_run2_.label().empty() ) {
         pf_mvaId_src_run2_ = consumes<edm::ValueMap<float> > ( cfg.getParameter<edm::InputTag>("pfmvaId_Run2") );
       }
       if ( !pf_mvaId_src_Tag_run3_.label().empty() ) {
         pf_mvaId_src_run3_ = consumes<edm::ValueMap<float> > ( cfg.getParameter<edm::InputTag>("pfmvaId_Run3") );
-    }
+      }
+
+      ecalRecHitsEBToken_ = mayConsume<EcalRecHitCollection>(cfg.getParameter<edm::InputTag>("recHitCollectionEB"));
+      ecalRecHitsEEToken_ = mayConsume<EcalRecHitCollection>(cfg.getParameter<edm::InputTag>("recHitCollectionEE"));
+
     }
 
   ~ElectronMerger() override {}
@@ -93,6 +111,12 @@ public:
 
 private:
   const edm::ESGetToken<TransientTrackBuilder, TransientTrackRecord> ttbToken_;
+  const edm::ESGetToken<CaloTopology, CaloTopologyRecord> ecalTopologyToken_;
+  const edm::ESGetToken<CaloGeometry, CaloGeometryRecord> caloGeometryToken_;
+
+  edm::EDGetTokenT<EcalRecHitCollection> ecalRecHitsEBToken_;
+  edm::EDGetTokenT<EcalRecHitCollection> ecalRecHitsEEToken_;
+
   const edm::EDGetTokenT<edm::View<reco::Candidate> > triggerLeptons_;
   const edm::EDGetTokenT<edm::TriggerResults> triggerBits_;
   const edm::EDGetTokenT<pat::ElectronCollection> lowpt_src_;
@@ -101,6 +125,8 @@ private:
   std::unique_ptr<EffectiveAreas> ea_pfiso_;
   edm::EDGetTokenT<edm::ValueMap<float>> pf_mvaId_src_;
   const edm::InputTag pf_mvaId_src_Tag_;
+  edm::EDGetTokenT<edm::ValueMap<float>> pf_mvaIdcustom_src_;
+  const edm::InputTag pf_mvaIdcustom_src_Tag_;
   edm::EDGetTokenT<edm::ValueMap<float>> pf_mvaId_src_run2_;
   const edm::InputTag pf_mvaId_src_Tag_run2_;
   edm::EDGetTokenT<edm::ValueMap<float>> pf_mvaId_src_run3_;
@@ -124,6 +150,7 @@ private:
   const bool filterEle_;
   const bool addUserVarsExtra_;
   const bool efficiencyStudy_;
+  const bool saveRegressionVars_;
 
 };
 
@@ -140,6 +167,8 @@ void ElectronMerger::produce(edm::StreamID, edm::Event &evt, edm::EventSetup con
   evt.getByToken(pf_src_, pf);
   edm::Handle<edm::ValueMap<float> > pfmvaId;
   if ( !pf_mvaId_src_Tag_.label().empty() ) { evt.getByToken(pf_mvaId_src_, pfmvaId); }
+  edm::Handle<edm::ValueMap<float> > pfmvaIdcustom;
+  if ( !pf_mvaIdcustom_src_Tag_.label().empty() ) { evt.getByToken(pf_mvaIdcustom_src_, pfmvaIdcustom); }    
   edm::Handle<edm::ValueMap<float> > pfmvaId_run2;
   if ( !pf_mvaId_src_Tag_run2_.label().empty() ) { evt.getByToken(pf_mvaId_src_run2_, pfmvaId_run2); }
   edm::Handle<edm::ValueMap<float> > pfmvaId_run3;
@@ -244,6 +273,10 @@ void ElectronMerger::produce(edm::StreamID, edm::Event &evt, edm::EventSetup con
    float pf_mva_id_run2_iso = ele.userFloat("ElectronMVAEstimatorRun2Fall17IsoV2Values");
    float pf_mva_id_run3_iso = ele.userFloat("ElectronMVAEstimatorRun2RunIIIWinter22IsoV1Values");
 
+   float pf_mvacustom_id = 20.;
+   if ( !pf_mvaIdcustom_src_Tag_.label().empty() ) { pf_mvacustom_id = float((*pfmvaIdcustom)[ref]); }
+   else pf_mvacustom_id = ele.userFloat("ElectronMVAEstimatorRun2RunIIICustomJPsitoEERawValues");   
+
 
    ele.addUserInt("isPF", 1);
    ele.addUserInt("isLowPt", 0);
@@ -252,6 +285,7 @@ void ElectronMerger::produce(edm::StreamID, edm::Event &evt, edm::EventSetup con
    ele.addUserFloat("LPEleSeed_Fall17UnBiasedV1Value", 20.); // was called "unBiased"
    ele.addUserFloat("LPEleMvaID_2020Sept15Value", 20.); // was called "mvaId"
    ele.addUserFloat("PFEleMvaID_RetrainedValue", pf_mva_id); // was called "pfmvaId"
+   ele.addUserFloat("PFEleMvaID_Run3CustomJpsitoEEValue", pf_mvacustom_id);   
 
    // Run-2 PF ele ID
    //   mva no iso
@@ -287,6 +321,9 @@ void ElectronMerger::produce(edm::StreamID, edm::Event &evt, edm::EventSetup con
    ele.addUserInt("isPFoverlap", 0);
    ele.addUserFloat("dzTrg", dzTrg);
    ele.addUserInt("skipEle",skipEle);
+
+   //Add for low pt id
+   ele.addUserFloat("ids", -999.);
 
    // Attempt to match electrons to conversions in "gsfTracksOpenConversions" collection (NO MATCHES EXPECTED)
    ConversionInfo info;
@@ -391,6 +428,7 @@ void ElectronMerger::produce(edm::StreamID, edm::Event &evt, edm::EventSetup con
    ele.addUserFloat("LPEleSeed_Fall17UnBiasedV1Value", unbiased_seedBDT); // was called "unBiased"
    ele.addUserFloat("LPEleMvaID_2020Sept15Value", mva_id); // was called "mvaId"
    ele.addUserFloat("PFEleMvaID_RetrainedValue", 20.); // was called "pfmvaId"
+   ele.addUserFloat("PFEleMvaID_Run3CustomJpsitoEEValue", 20);   
 
    //need to add as placeholders
    // Run-2 PF ele ID
@@ -441,7 +479,7 @@ void ElectronMerger::produce(edm::StreamID, edm::Event &evt, edm::EventSetup con
 
    ele_out       -> emplace_back(ele);
   }
-}
+}//end of if(saveLowPtE_)
 
   // Isolation (+ correction)
   size_t ie=-1;
@@ -504,6 +542,119 @@ void ElectronMerger::produce(edm::StreamID, edm::Event &evt, edm::EventSetup con
     ele.addUserFloat("drTrg", drTrg);
     ele.addUserFloat("dPtOverPtTrg", dPtOverPtTrg);
   }
+
+  // REGRESSION VARIABLES
+  if(saveRegressionVars_){
+
+    // retrieve ECAL topology, ECAL Rec Hits
+    edm::Handle<EcalRecHitCollection> ecalRecHitsEBH;
+    edm::Handle<EcalRecHitCollection> ecalRecHitsEEH;
+    evt.getByToken(ecalRecHitsEBToken_, ecalRecHitsEBH);
+    evt.getByToken(ecalRecHitsEEToken_, ecalRecHitsEEH);
+
+    const EcalRecHitCollection* recHits = nullptr;
+
+    // retrieve topology
+    const auto& topology = iSetup.getData(ecalTopologyToken_);
+    const auto& geometry = iSetup.getData(caloGeometryToken_);    
+
+    for(auto &ele : *ele_out){
+      bool isEB = ele.seed()->seed().subdetId() == EcalBarrel;      
+      ele.addUserInt("isEB", isEB);
+
+      // retrieve correct collection of rec hits
+      if(isEB){
+        recHits = ecalRecHitsEBH.product();
+      } else {
+        recHits = ecalRecHitsEEH.product();
+      }
+
+      // Define ShowerClusterHelper to retrieve variables of interest
+      SuperClusterHelper* mySCHelper = new SuperClusterHelper(&ele, recHits, &topology, &geometry);
+
+      // SHOWER SHAPE VARIABLES
+      ele.addUserFloat("e3x3", mySCHelper->e3x3());
+
+      // SEED ETA/PHI INDEX
+      // code from https://github.com/cms-egamma/SHarper-UserCode/blob/31c0e6a5df7e477436b6951f843945ee35ca5b84/TrigNtup/src/EGRegTreeStruct.cc
+      int iEtaOrX = -999, iPhiOrY = -999, iEtaMod5 = -999, iPhiMod2 = -999, iEtaMod20 = -999, iPhiMod20 = -999;
+
+      if(isEB){
+        // create SuperClusterHelper
+        EBDetId ebDetId(ele.superCluster()->seed()->seed());
+        iEtaOrX = ebDetId.ieta();
+        iPhiOrY = ebDetId.iphi();
+
+        const int iEtaCorr = ebDetId.ieta() - (ebDetId.ieta() > 0 ? +1 : -1);
+        const int iEtaCorr26 = ebDetId.ieta() - (ebDetId.ieta() > 0 ? +26 : -26);
+        iEtaMod5 = iEtaCorr % 5;
+        iEtaMod20 = std::abs(ebDetId.ieta()) <= 25 ? iEtaCorr % 20 : iEtaCorr26 % 20;
+        iPhiMod2 = (ebDetId.iphi() - 1) % 2;
+        iPhiMod20 = (ebDetId.iphi() - 1) % 20;
+      } else {
+        EEDetId eeDetId(ele.superCluster()->seed()->seed());
+        iEtaOrX = eeDetId.ix();
+        iPhiOrY = eeDetId.iy();
+      }
+
+      ele.addUserInt("iEtaOrX", iEtaOrX);
+      ele.addUserInt("iPhiOrY", iPhiOrY);
+      ele.addUserInt("iEtaMod5", iEtaMod5);
+      ele.addUserInt("iPhiMod2", iPhiMod2);
+      ele.addUserInt("iEtaMod20", iEtaMod20);
+      ele.addUserInt("iPhiMod20", iPhiMod20);
+
+      ele.addUserInt("etaCrySeed", mySCHelper->etaCrySeed());
+      ele.addUserInt("phiCrySeed", mySCHelper->phiCrySeed());
+      
+      // SUBCLUSTERS
+      ele.addUserFloat("eSubClusters", mySCHelper->eSubClusters());
+
+      for(int i = 1; i < 4; i++){
+        ele.addUserFloat("subClusterEnergy"+std::to_string(i), mySCHelper->subClusterEnergy(i));
+        ele.addUserFloat("subClusterEta"+std::to_string(i), mySCHelper->subClusterEta(i));
+        ele.addUserFloat("subClusterPhi"+std::to_string(i), mySCHelper->subClusterPhi(i));
+        ele.addUserFloat("subClusterEmax"+std::to_string(i), mySCHelper->subClusterEmax(i));
+        ele.addUserFloat("subClusterE3x3"+std::to_string(i), mySCHelper->subClusterE3x3(i));
+        ele.addUserFloat("subClusterDEta"+std::to_string(i), mySCHelper->subClusterEta(i) - ele.seed()->eta());
+        ele.addUserFloat("subClusterDPhi"+std::to_string(i), reco::deltaPhi(mySCHelper->subClusterPhi(i), ele.seed()->phi()));
+      }
+
+      ele.addUserFloat("eESClusters", mySCHelper->eESClusters());
+      ele.addUserInt("nPreshowerClusters", mySCHelper->nPreshowerClusters());
+      for(int i = 0; i < 3; i++){
+        ele.addUserFloat("esClusterEnergy"+std::to_string(i), mySCHelper->esClusterEnergy(i));
+        ele.addUserFloat("esClusterEta"+std::to_string(i), mySCHelper->esClusterEta(i));
+        ele.addUserFloat("esClusterPhi"+std::to_string(i), mySCHelper->esClusterPhi(i));
+      }
+
+      // code adapted from https://github.com/cms-egamma/SHarper-UserCode/blob/31c0e6a5df7e477436b6951f843945ee35ca5b84/TrigNtup/src/EGRegTreeStruct.cc#L222
+      float maxDR2 = 0;
+      float clusterMaxDR = -999., clusterMaxDRDPhi = -999., clusterMaxDRDEta = -999., clusterMaxDRRawEnergy = -999.;
+      float seedEta = ele.superCluster()->seed()->eta(), seedPhi = ele.superCluster()->seed()->phi();
+
+      if(ele.superCluster()->clusters().isNonnull() && ele.superCluster()->clusters().isAvailable()){
+        for(auto& clus : ele.superCluster()->clusters()){
+          if(clus == ele.superCluster()->seed()) continue;
+          float dR2 = reco::deltaR2(seedEta, seedPhi, clus->eta(), clus->phi());
+          if(dR2 > maxDR2){
+            maxDR2 = dR2;
+            clusterMaxDR = std::sqrt(dR2);
+            clusterMaxDRDPhi = reco::deltaPhi(clus->phi(),seedPhi);
+            clusterMaxDRDEta = clus->eta()-seedEta;
+            clusterMaxDRRawEnergy = clus->energy();
+          }
+        }
+      }
+
+      ele.addUserFloat("clusterMaxDR", clusterMaxDR);
+      ele.addUserFloat("clusterMaxDRDPhi", clusterMaxDRDPhi);
+      ele.addUserFloat("clusterMaxDRDEta", clusterMaxDRDEta);
+      ele.addUserFloat("clusterMaxDRRawEnergy", clusterMaxDRRawEnergy);
+
+    }    
+  }
+
 
   // build transient track collection
   for(pat::Electron &ele : *ele_out){

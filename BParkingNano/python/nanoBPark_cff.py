@@ -44,6 +44,9 @@ from DoubleElectronNANO.BParkingNano.tracksBPark_cff import *
 ## Dielectron collection
 from DoubleElectronNANO.BParkingNano.dielectron_cff import *
 
+# Removing dependency on byVVVLooseDeepTau2018v2p5VSjet, which doesn't work for 2022 preEE mini (v<4) data
+finalTaus.cut=cms.string("pt > 18 && ((tauID('decayModeFindingNewDMs') > 0.5 && (tauID('byLooseCombinedIsolationDeltaBetaCorr3Hits') || (tauID('chargedIsoPtSumdR03')+max(0.,tauID('neutralIsoPtSumdR03')-0.072*tauID('puCorrPtSum'))<2.5))) || (?isTauIDAvailable('byUTagCHSVSjetraw')?tauID('byUTagCHSVSjetraw'):-1) > {} || (?isTauIDAvailable('byUTagPUPPIVSjetraw')?tauID('byUTagPUPPIVSjetraw'):-1) > {})".format(0.05, 0.05))
+
 # nanoSequenceOnlyFullSim = cms.Sequence(triggerObjectBParkTables + l1bits)
 nanoSequenceOnlyFullSim = cms.Sequence(electronTriggerObjectBParkTables + l1bits)
 
@@ -86,6 +89,7 @@ def nanoAOD_customizeEgammaPostRecoTools(process):
                                 # # Run 2 BPark retrain
                                 # 'DoubleElectronNANO.BParkingNano.mvaElectronID_BParkRetrain_cff',
                                 # 'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_BParkRetrain_cff',
+                                'DoubleElectronNANO.BParkingNano.mvaElectronID_RunIII_custom_JPsitoEE_cff',
                             ],
                             isMiniAOD=True,
                         )

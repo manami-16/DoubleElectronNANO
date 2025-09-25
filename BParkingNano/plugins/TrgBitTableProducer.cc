@@ -52,6 +52,7 @@ public:
     l1seeds_( cfg.getParameter< std::vector<std::string> >( "seeds" ) )
 {
     produces<nanoaod::FlatTable>();
+    // produces<nanoaod::FlatTable>("globalVariables");
 
 }
 
@@ -131,6 +132,9 @@ TrgBitTableProducer::produce( edm::Event &evt, edm::EventSetup const &stp)
   }
 
   // get HLT triggers
+  bool anyDoubleElefired_flag = false; // <--- NEW: Flag for DoubleEle HLT paths
+  bool anyVBFfired_flag = false;       // <--- NEW: Flag for VBF HLT paths
+
   if ( hltResults.failedToGet() ){
     for ( unsigned int ibit = 0; ibit < Npaths; ++ibit)
       hltbits.push_back( 0 );
@@ -143,8 +147,14 @@ TrgBitTableProducer::produce( edm::Event &evt, edm::EventSetup const &stp)
         if ( !hltResults->accept( itrg ) ) continue;
         TString TrigPath = trigName.triggerName( itrg );
         if ( TrigPath.Contains( hltpath ) ){
-           fire=true; 
-           break; 
+          fire=true;
+          if (TrigPath.Contains("DoubleEle", TString::kIgnoreCase)) {
+            anyDoubleElefired_flag = true;
+          }
+          if (TrigPath.Contains("VBF", TString::kIgnoreCase)) {
+            anyVBFfired_flag = true;
+          }
+          break; 
         }
       } 
       
@@ -152,16 +162,20 @@ TrgBitTableProducer::produce( edm::Event &evt, edm::EventSetup const &stp)
       else hltbits.push_back( 0 );
     }
   }
- 
- 
-  auto tab  = std::make_unique<nanoaod::FlatTable>(1,"", true);
+
+
+  auto tab  = std::make_unique<nanoaod::FlatTable>(1,"", true, true);
   for (unsigned int ipath = 0; ipath <Npaths; ++ipath ){
     tab->addColumnValue<uint8_t> (hltpaths_[ipath], hltbits[ipath], "hlt path");
   }
   for (unsigned int iseed = 0; iseed <Nseeds; ++iseed ){
     tab->addColumnValue<uint8_t> (l1seeds_[iseed], l1bits[iseed], "l1 seed");
   }
-    evt.put(std::move(tab));
+
+  tab->addColumnValue<bool> ("any_DoubleEle_fired", anyDoubleElefired_flag, "1 if any of the configured HLT paths containing '_DoubleEle' fired"); // <--- NEW COLUMN
+  tab->addColumnValue<bool> ("any_VBF_fired", anyVBFfired_flag, "1 if any of the configured HLT paths containing '_VBF_' fired");       // <--- NEW COLUMN
+
+  evt.put(std::move(tab));
 
 }
 
