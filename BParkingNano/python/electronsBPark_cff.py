@@ -39,16 +39,27 @@ slimmedPFElectronsWithUserData = cms.EDProducer("PATElectronUserDataEmbedder",
     src = cms.InputTag("mySlimmedPFElectronsWithEmbeddedTrigger"), #includes trigger matching
     userFloats = cms.PSet(
         ElectronMVAEstimatorRun2BParkRetrainRawValues = cms.InputTag("myelectronMVAValueMapProducer:ElectronMVAEstimatorRun2BParkRetrainRawValues"),
-    
-    ElectronMVAEstimatorRun2RunIIICustomJPsitoEERawValues = cms.InputTag("myelectronMVAValueMapProducer:ElectronMVAEstimatorRun2RunIIICustomJPsitoEERawValues") 
+        ElectronMVAEstimatorRun2RunIIICustomJPsitoEERawValues = cms.InputTag("myelectronMVAValueMapProducer:ElectronMVAEstimatorRun2RunIIICustomJPsitoEERawValues") 
     ),
     userInts = cms.PSet(
         seedGain = cms.InputTag("seedGainElePF"),
     )
 )
 
+modifiedIDLowPtElectrons = cms.EDProducer(
+    "lowPtIDProducer",
+    src = cms.InputTag("customUpdatedLowPtElectrons"),
+    modelFile  = cms.string("DoubleElectronNANO/BParkingNano/data/LowPtElectrons/electron_id_JPsiToEE2023_10Jun2025_all.root"),
+    rho = cms.InputTag("fixedGridRhoFastjetAll"),
+    isMC = cms.bool(True),
+    deltaR = cms.double(0.03),
+)
+
 slimmedLowPtElectronsWithUserData = cms.EDProducer("PATElectronUserDataEmbedder",
     src = cms.InputTag("customUpdatedLowPtElectrons"),
+    userFloats = cms.PSet(
+        ids = cms.InputTag("modifiedIDLowPtElectrons:ids"),
+    ),
     userInts = cms.PSet(
         seedGain = cms.InputTag("seedGainEleLowPt"),
     ),
@@ -249,6 +260,7 @@ electronBParkTable = cms.EDProducer("SimplePATElectronFlatTableProducer",
         convTrail = Var("userInt('convTrail')",bool,doc="Matched to trailing track from conversion"),
         convExtra = Var("userInt('convExtra')",bool,doc="Flag to indicate if all conversion variables are stored"),
         skipEle = Var("userInt('skipEle')",bool,doc="Is ele skipped (due to small dR or large dZ w.r.t. trigger)?"),
+        lowPtID_10Jun2025 = Var("userFloat('ids')", float, doc="new run3 ID, trained on JPsiToEE 2023 events", precision=6),
         )
 )
 
@@ -314,6 +326,7 @@ electronsBParkSequence = cms.Sequence(
     myelectronMVAValueMapProducer +
     seedGainElePF +
     seedGainEleLowPt +
+    modifiedIDLowPtElectrons +
     slimmedPFElectronsWithUserData +
     slimmedLowPtElectronsWithUserData +
     electronsForAnalysis

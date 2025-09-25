@@ -280,7 +280,7 @@ elif options.mode == "trg":
     modifiers.append(triggerMatchingStudy)
 elif options.mode == "vbf":
     if options.year == 2022:
-        raise ValueError("VBF mode is not supported for 2022 data")
+        raise ValueError("VBF parking was not active during 2022")
     elif options.year == 2023:
         if options.version == 'C':
             modifiers.append(vbfSkimming2023_C)

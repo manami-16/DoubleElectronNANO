@@ -169,8 +169,6 @@ TrgBitTableProducer::produce( edm::Event &evt, edm::EventSetup const &stp)
     }
   }
 
- 
- 
   auto tab  = std::make_unique<nanoaod::FlatTable>(1,"", true, true);
   for (unsigned int ipath = 0; ipath <Npaths; ++ipath ){
     tab->addColumnValue<uint8_t> (hltpaths_[ipath], hltbits[ipath], "hlt path");
@@ -178,6 +176,7 @@ TrgBitTableProducer::produce( edm::Event &evt, edm::EventSetup const &stp)
   for (unsigned int iseed = 0; iseed <Nseeds; ++iseed ){
     tab->addColumnValue<uint8_t> (l1seeds_[iseed], l1bits[iseed], "l1 seed");
   }
+  
   edm::LogInfo("MyProducer") << "Final value of anyVBFfired_flag: " << (anyVBFfired_flag ? "True" : "False");
   
   tab->addColumnValue<bool> ("any_DoubleEle_fired", anyDoubleElefired_flag, "1 if any of the configured HLT paths containing '_DoubleEle' fired"); // <--- NEW COLUMN

@@ -81,7 +81,6 @@ void DiLeptonBuilder<Lepton>::produce(edm::StreamID, edm::Event &evt, edm::Event
       lepton_pair.addUserInt("l1_sel", l1_selection_(*l1_ptr));
       lepton_pair.addUserInt("l2_sel", l2_selection_(*l2_ptr));
       lepton_pair.setP4(l1_ptr->p4() + l2_ptr->p4());
-
       lepton_pair.setCharge(l1_ptr->charge() + l2_ptr->charge());
       lepton_pair.addUserFloat("lep_deltaR", reco::deltaR(*l1_ptr, *l2_ptr));
       int nlowpt=0;

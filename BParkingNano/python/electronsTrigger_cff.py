@@ -190,6 +190,22 @@ vbfSkimming2024.toModify(hltHighLevel,
     )
 )
 
+vbfSkimming2023.toModify(hltHighLevel,
+    HLTPaths = cms.vstring(
+        [ f"{p}_v*" for p in [
+        'HLT_VBF_DiPFJet105_40_Mjj1000_Detajj3p5',
+        'HLT_VBF_DiPFJet110_40_Mjj1000_Detajj3p5',
+        'HLT_VBF_DiPFJet125_45_Mjj1000_Detajj3p5',
+        'HLT_VBF_DiPFJet125_45_Mjj720_Detajj3p0',
+        'HLT_VBF_DiPFJet45_Mjj500_Detajj2p5_Ele12_eta2p1_WPTight_Gsf',
+        'HLT_VBF_DiPFJet45_Mjj500_Detajj2p5_Ele17_eta2p1_WPTight_Gsf',
+        'HLT_VBF_DiPFJet50_Mjj500_Detajj2p5_Ele22_eta2p1_WPTight_Gsf',
+        'HLT_VBF_DiPFJet45_Mjj500_Detajj2p5_Photon12',
+        'HLT_VBF_DiPFJet45_Mjj500_Detajj2p5_Photon17',
+        'HLT_VBF_DiPFJet50_Mjj500_Detajj2p5_Photon22'
+        ]]
+    )
+)
 
 efficiencyStudy.toModify(hltHighLevel,
     HLTPaths = cms.vstring([]) # disable HLT selection
