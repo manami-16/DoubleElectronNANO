@@ -9,6 +9,11 @@ options.register('year', 2023,
     VarParsing.varType.int,
     "Year to process between 2022 or 2023 (default)")
 
+options.register('subera', 0,
+    VarParsing.multiplicity.singleton,
+    VarParsing.varType.int,
+    "Subera of the given year. 0 is preEE (2022) or preBPix (2023), 1 is post~. No difference for 2024")
+
 options.register('isMC', False,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
@@ -78,39 +83,54 @@ options.register('mode', "reco",
     "Run standard reco ('reco'), efficiency study ('eff'), or trigger matching study ('trg')"
 )
 
-options.setDefault('maxEvents', -1)
+options.register('version', 'A',
+    VarParsing.multiplicity.singleton,
+    VarParsing.varType.string,
+    "RUN version - A, B, C, D, etc")
+
+options.setDefault('maxEvents', 500)
 options.setDefault('tag', '130X')
 options.parseArguments()
 
 #!TEST
 options.isMC = 0
 options.reportEvery = 1000
-options.tag = '2025Sep10_test'
-options.globalTag = '140X_dataRun3_v20'
+options.tag = '2025Sep24_test'
+# options.globalTag = '130X_dataRun3_PromptAnalysis_v1'
 options.lhcRun = 3
-options.year = 2024
+options.year = 2023
 options.mode = 'vbf'
 options.saveAllNanoContent = 1
-options.inputFiles = ["root://cms-xrd-global.cern.ch//store/data/Run2024I/ParkingVBF1/MINIAOD/MINIv6NANOv15_v2-v3/90000/f6550b8f-2a31-4f6d-8ef8-1b513ad6abb1.root",
-                      "root://cms-xrd-global.cern.ch//store/data/Run2024I/ParkingVBF1/MINIAOD/MINIv6NANOv15_v2-v3/2520000/0018f66b-9c0a-4a96-9a4c-18c0fe3aa80a.root",]
+options.version = 'C'
+options.globalTag = 'auto:phase1_2023_realistic'
+options.inputFiles = ["root://cms-xrd-global.cern.ch//store/data/Run2023C/ParkingVBF0/MINIAOD/22Sep2023_v3-v1/2550000/0513be34-61b1-42af-938f-cfd105534ffd.root",]
+                      # "root://cms-xrd-global.cern.ch//store/data/Run2024I/ParkingVBF1/MINIAOD/MINIv6NANOv15_v2-v3/2520000/0018f66b-9c0a-4a96-9a4c-18c0fe3aa80a.root",]
                       # "root://cms-xrd-global.cern.ch//store/data/Run2024I/ParkingVBF1/MINIAOD/MINIv6NANOv15_v2-v3/2520000/0058a829-3206-42c9-ac3d-042847249954.root"]
 
 
 print(options)
 
 globaltag = None
+if options.year==2022:
+    globaltag='auto:phase1_2022_realistic' if options.subera==0 else 'auto:phase1_2022_realistic_postEE'
+if options.year==2023:
+    globaltag='auto:phase1_2023_realistic' if options.subera==0 else 'auto:phase1_2023_realistic_postBPix'
+if options.year==2024:
+    globaltag='auto:phase1_2024_realistic'
+if not options.isMC:
+    globaltag='auto:run3_data'
 
-if options.year == 2022:
-    globaltag = '124X_mcRun3_2022_realistic_postEE_v3' if options.isMC else '124X_dataRun3_PromptAnalysis_v1'
-    # NB for DATA: use 124X_dataRun3_PromptAnalysis_v1 for PromptReco, 124X_dataRun3_v15 for ReReco
-elif options.year == 2023:
-    globaltag = "130X_mcRun3_2023_realistic_postBPix_v2" if options.isMC else "130X_dataRun3_PromptAnalysis_v1"
-    if options.isPromptJpsi:
-        globaltag = "130X_mcRun3_2023_realistic_v14"
-elif options.year == 2024:
-    pass
-else:
-    raise ValueError("Year must be 2022 or 2023")
+# if options.year == 2022:
+#     globaltag = '124X_mcRun3_2022_realistic_postEE_v3' if options.isMC else '124X_dataRun3_PromptAnalysis_v1'
+#     # NB for DATA: use 124X_dataRun3_PromptAnalysis_v1 for PromptReco, 124X_dataRun3_v15 for ReReco
+# elif options.year == 2023:
+#     globaltag = "130X_mcRun3_2023_realistic_postBPix_v2" if options.isMC else "130X_dataRun3_PromptAnalysis_v1"
+#     if options.isPromptJpsi:
+#         globaltag = "130X_mcRun3_2023_realistic_v14"
+# elif options.year == 2024:
+#     pass
+# else:
+#     raise ValueError("Year must be 2022 or 2023")
 
 globaltag = options.globalTag
 
@@ -334,7 +354,10 @@ elif options.mode == "vbf":
     if options.year == 2022:
         raise ValueError("VBF mode is not supported for 2022 data")
     elif options.year == 2023:
-        raise NotImplementedError("VBF mode is not implemented for 2023 data yet")
+        if options.version == 'C':
+            modifiers.append(vbfSkimming2023_C)
+        else:
+            modifiers.append(vbfSkimming2023_D)
     elif options.year == 2024:
         modifiers.append(vbfSkimming2024)
 
