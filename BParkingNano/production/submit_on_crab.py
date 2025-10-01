@@ -47,11 +47,11 @@ if __name__ == '__main__':
           print("Failed submitting task:",cle)
 
   parser = ArgumentParser()
-  parser.add_argument('-y', '--yaml', default = 'BParkingNano/production/samples_VBF_Run3_2023.yml', help = 'File with dataset descriptions')
+  parser.add_argument('-y', '--yaml', default = 'BParkingNano/production/samples_INCLUSIVE_Run3_2023.yml', help = 'File with dataset descriptions')
   parser.add_argument('-f', '--filter', default='*', help = 'filter samples, POSIX regular expressions allowed')
   parser.add_argument('-r', '--lhcRun', type=int, default=3, help = 'Run 2 or 3 (default)')
   parser.add_argument('-yy', '--year', type=int, default=2023, help = 'Year of the dataset')
-  parser.add_argument('-m', '--mode', type=str, default="vbf", help= 'reco = apply skim, eff = disable all selections, vbf = apply vbf hlts')
+  parser.add_argument('-m', '--mode', type=str, default="reco", help= 'reco = apply skim, eff = disable all selections, vbf = apply vbf hlts')
   parser.add_argument('-s', '--saveAllNanoContent', type=bool, default=True, help= 'Save all nano content (default = True)')
   parser.add_argument('-sr', '--saveRegressionVars', type=bool, default=False, help='Save regression variables (default = False)')
   args = parser.parse_args()
@@ -69,7 +69,7 @@ if __name__ == '__main__':
         version = info['version'] if 'version' in info else 'Z'
 
         config.Data.inputDBS = input_dbs if input_dbs is not None else 'global'
-        config.Data.inputDataset = info['userInputFiles'] if 'userInputFiles' in info else info['dataset']
+        config.Data.inputDataset = info['dataset']
 
         print(f'submitting -- {sample}')
         config.General.requestName = sample
@@ -79,7 +79,9 @@ if __name__ == '__main__':
             config.Data.lumiMask = common['data']['lumiMask']
         else:
             config.Data.lumiMask = ''
-            # config.Data.userInputFiles = info['userInputFiles'] if 'userInputFiles' in info else None
+            
+        if 'userInputFiles' in info:
+            config.Data.userInputFiles = info['userInputFiles']
 
         config.Data.unitsPerJob = common['data']['splitting']
 
