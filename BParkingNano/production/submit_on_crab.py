@@ -15,14 +15,14 @@ config.General.workArea = 'DoubleElectronNANO_{:s}'.format(production_tag)
 
 config.section_('Data')
 config.Data.publication = False
-config.Data.outLFNDirBase = '/store/group/cmst3/group/xee' ## Have not gotten the w-access
+config.Data.outLFNDirBase = '/store/group/cmst3/group/xee/tree_v1'
 
 config.Data.inputDBS = 'global'
 
 config.section_('JobType')
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'BParkingNano/test/run_nano_cfg.py'
-config.JobType.maxJobRuntimeMin = 3000
+config.JobType.maxJobRuntimeMin = 2000 ## default 3000
 config.JobType.maxMemoryMB = 3500
 config.JobType.allowUndistributedCMSSW = True
 
@@ -69,7 +69,7 @@ if __name__ == '__main__':
         version = info['version'] if 'version' in info else 'Z'
 
         config.Data.inputDBS = input_dbs if input_dbs is not None else 'global'
-        config.Data.inputDataset = info['dataset']
+        config.Data.inputDataset = info['userInputFiles'] if 'userInputFiles' in info else info['dataset']
 
         print(f'submitting -- {sample}')
         config.General.requestName = sample
@@ -79,6 +79,7 @@ if __name__ == '__main__':
             config.Data.lumiMask = common['data']['lumiMask']
         else:
             config.Data.lumiMask = ''
+            # config.Data.userInputFiles = info['userInputFiles'] if 'userInputFiles' in info else None
 
         config.Data.unitsPerJob = common['data']['splitting']
 
@@ -116,8 +117,7 @@ if __name__ == '__main__':
         output_flags.append(production_tag)
 
         config.JobType.outputFiles = ['_'.join(output_flags)+'.root']
-        config.Data.outLFNDirBase = '/store/group/cmst3/group/xee'
-        # config.Data.outLFNDirBase = '/store/user/mkanemur/LowPT' ## test
+        config.Data.outLFNDirBase = '/store/group/cmst3/group/xee/tree_v1'
 
         if "HAHM" in sample:
             config.Data.outLFNDirBase += '/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024'
