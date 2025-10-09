@@ -69,7 +69,6 @@ if __name__ == '__main__':
         version = info['version'] if 'version' in info else 'Z'
 
         config.Data.inputDBS = input_dbs if input_dbs is not None else 'global'
-        config.Data.inputDataset = info['dataset']
 
         print(f'submitting -- {sample}')
         config.General.requestName = sample
@@ -79,16 +78,15 @@ if __name__ == '__main__':
             config.Data.lumiMask = common['data']['lumiMask']
         else:
             config.Data.lumiMask = ''
-            
+
         if 'userInputFiles' in info:
             config.Data.userInputFiles = info['userInputFiles']
+            config.Data.outputPrimaryDataset = info['userInputFiles'][0].split('/')[6] ## HAHM_DarkPhoton_13p6TeV_Nov2024
+            config.Site.whitelist = ['T2_CH_CERN']
+        else:
+            config.Data.inputDataset = info['dataset']
 
         config.Data.unitsPerJob = common['data']['splitting']
-
-        # globaltag = info.get(
-        #     'globaltag',
-        #     common[common_branch].get('globaltag', None)
-        # )
 
         config.JobType.pyCfgParams = [
             'isMC={:.0f}'.format(int(isMC)),
