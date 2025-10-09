@@ -15,6 +15,7 @@ common:
     lhcRun: 3
     tag: '2023Inclusive' ## produced nanoAOD root filename
     lumiMask: 'https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions23/Cert_Collisions2023_366442_370790_Golden.json'
+    splitting: 20
 
 samples:
   Run2023Bv1:
@@ -81,8 +82,8 @@ samples:
     isMC: True
     subera: 1
 
-  ## Signal Samples
-  ## https://dpee.docs.cern.ch/Samples/signal/#inclusive-production
+  # ## Signal Samples
+  # ## https://dpee.docs.cern.ch/Samples/signal/#inclusive-production
   HAHM_13p6TeV_M6p5:
     dataset: /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024
     isMC: True
