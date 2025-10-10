@@ -67,6 +67,7 @@ if __name__ == '__main__':
         input_dbs = info['dbs'] if 'dbs' in info else None
         isMC = info['isMC']
         version = info['version'] if 'version' in info else 'Z'
+        isSignal = info['isSignal'] if 'isSignal' in info else False
 
         config.Data.inputDBS = input_dbs if input_dbs is not None else 'global'
 
@@ -98,7 +99,8 @@ if __name__ == '__main__':
             'mode={:s}'.format(args.mode),
             'saveAllNanoContent={:.0f}'.format(int(args.saveAllNanoContent)),
             'saveRegressionVars={:.0f}'.format(int(args.saveRegressionVars)),
-            'version={:s}'.format(version)
+            'version={:s}'.format(version),
+            'isSignal={}'.format(isSignal)
         ]
 
         ext1 = {False:'data', True:'mc'}

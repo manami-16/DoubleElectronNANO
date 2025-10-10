@@ -19,154 +19,160 @@ common:
     splitting: 20
     
 samples:
-  ## 2023-C
-  # Run2023C0_v3:
-  #   dataset: /ParkingVBF0/Run2023C-22Sep2023_v3-v1/MINIAOD
-  #   isMC: False
-  #   version: C
-  # Run2023C0_v4:
-  #   dataset: /ParkingVBF0/Run2023C-22Sep2023_v4-v1/MINIAOD
-  #   isMC: False
-  #   version: C
-  # Run2023C1_v3:
-  #   dataset: /ParkingVBF1/Run2023C-22Sep2023_v3-v1/MINIAOD
-  #   isMC: False
-  #   version: C
-  # Run2023C1_v4:
-  #   dataset: /ParkingVBF1/Run2023C-22Sep2023_v4-v1/MINIAOD
-  #   isMC: False
-  #   version: C
-  # Run2023C2_v3:
-  #   dataset: /ParkingVBF2/Run2023C-22Sep2023_v3-v1/MINIAOD
-  #   isMC: False
-  #   version: C
-  # Run2023C2_v4:
-  #   dataset: /ParkingVBF2/Run2023C-22Sep2023_v4-v1/MINIAOD
-  #   isMC: False
-  #   version: C
-  # Run2023C3_v3:
-  #   dataset: /ParkingVBF3/Run2023C-22Sep2023_v3-v1/MINIAOD
-  #   isMC: False
-  #   version: C
-  # Run2023C3_v4:
-  #   dataset: /ParkingVBF3/Run2023C-22Sep2023_v4-v1/MINIAOD
-  #   isMC: False
-  #   version: C
-  # Run2023C4_v4:
-  #   dataset: /ParkingVBF4/Run2023C-22Sep2023_v4-v1/MINIAOD
-  #   isMC: False
-  #   version: C
-  # Run2023C5_v4:
-  #   dataset: /ParkingVBF5/Run2023C-22Sep2023_v4-v1/MINIAOD
-  #   isMC: False
-  #   version: C
-  # Run2023C6_v4:
-  #   dataset: /ParkingVBF6/Run2023C-22Sep2023_v4-v1/MINIAOD
-  #   isMC: False
-  #   version: C
-  # Run2023C7_v4:
-  #   dataset: /ParkingVBF7/Run2023C-22Sep2023_v4-v1/MINIAOD
-  #   isMC: False
-  #   version: C
+  # 2023-C
+  Run2023C0_v3:
+    dataset: /ParkingVBF0/Run2023C-22Sep2023_v3-v1/MINIAOD
+    isMC: False
+    version: C
+  Run2023C0_v4:
+    dataset: /ParkingVBF0/Run2023C-22Sep2023_v4-v1/MINIAOD
+    isMC: False
+    version: C
+  Run2023C1_v3:
+    dataset: /ParkingVBF1/Run2023C-22Sep2023_v3-v1/MINIAOD
+    isMC: False
+    version: C
+  Run2023C1_v4:
+    dataset: /ParkingVBF1/Run2023C-22Sep2023_v4-v1/MINIAOD
+    isMC: False
+    version: C
+  Run2023C2_v3:
+    dataset: /ParkingVBF2/Run2023C-22Sep2023_v3-v1/MINIAOD
+    isMC: False
+    version: C
+  Run2023C2_v4:
+    dataset: /ParkingVBF2/Run2023C-22Sep2023_v4-v1/MINIAOD
+    isMC: False
+    version: C
+  Run2023C3_v3:
+    dataset: /ParkingVBF3/Run2023C-22Sep2023_v3-v1/MINIAOD
+    isMC: False
+    version: C
+  Run2023C3_v4:
+    dataset: /ParkingVBF3/Run2023C-22Sep2023_v4-v1/MINIAOD
+    isMC: False
+    version: C
+  Run2023C4_v4:
+    dataset: /ParkingVBF4/Run2023C-22Sep2023_v4-v1/MINIAOD
+    isMC: False
+    version: C
+  Run2023C5_v4:
+    dataset: /ParkingVBF5/Run2023C-22Sep2023_v4-v1/MINIAOD
+    isMC: False
+    version: C
+  Run2023C6_v4:
+    dataset: /ParkingVBF6/Run2023C-22Sep2023_v4-v1/MINIAOD
+    isMC: False
+    version: C
+  Run2023C7_v4:
+    dataset: /ParkingVBF7/Run2023C-22Sep2023_v4-v1/MINIAOD
+    isMC: False
+    version: C
 
-  # ## 2023-D
-  # Run2023D0_v1:
-  #   dataset: /ParkingVBF0/Run2023D-22Sep2023_v1-v1/MINIAOD
-  #   isMC: False
-  #   version: D
-  # Run2023D0_v2:
-  #   dataset: /ParkingVBF0/Run2023D-22Sep2023_v2-v1/MINIAOD
-  #   isMC: False
-  #   version: D
-  # Run2023D1_v1:
-  #   dataset: /ParkingVBF1/Run2023D-22Sep2023_v1-v1/MINIAOD
-  #   isMC: False
-  #   version: D
-  # Run2023D1_v2:
-  #   dataset: /ParkingVBF1/Run2023D-22Sep2023_v2-v1/MINIAOD
-  #   isMC: False
-  #   version: D
-  # Run2023D2_v1:
-  #   dataset: /ParkingVBF2/Run2023D-22Sep2023_v1-v1/MINIAOD
-  #   isMC: False
-  #   version: D
-  # Run2023D2_v2:
-  #   dataset: /ParkingVBF2/Run2023D-22Sep2023_v2-v1/MINIAOD
-  #   isMC: False
-  #   version: D
-  # Run2023D3_v1:
-  #   dataset: /ParkingVBF3/Run2023D-22Sep2023_v1-v1/MINIAOD
-  #   isMC: False
-  #   version: D
-  # Run2023D3_v2:
-  #   dataset: /ParkingVBF3/Run2023D-22Sep2023_v2-v1/MINIAOD
-  #   isMC: False
-  #   version: D
-  # Run2023D4_v1:
-  #   dataset: /ParkingVBF4/Run2023D-22Sep2023_v1-v1/MINIAOD
-  #   isMC: False
-  #   version: D
-  # Run2023D4_v2:
-  #   dataset: /ParkingVBF4/Run2023D-22Sep2023_v2-v1/MINIAOD
-  #   isMC: False
-  #   version: D
-  # Run2023D5_v1:
-  #   dataset: /ParkingVBF5/Run2023D-22Sep2023_v1-v1/MINIAOD
-  #   isMC: False
-  #   version: D
-  # Run2023D5_v2:
-  #   dataset: /ParkingVBF5/Run2023D-22Sep2023_v2-v1/MINIAOD
-  #   isMC: False
-  #   version: D
-  # Run2023D6_v1:
-  #   dataset: /ParkingVBF6/Run2023D-22Sep2023_v1-v1/MINIAOD
-  #   isMC: False
-  #   version: D
-  # Run2023D6_v2:
-  #   dataset: /ParkingVBF6/Run2023D-22Sep2023_v2-v1/MINIAOD
-  #   isMC: False
-  #   version: D
-  # Run2023D7_v1:
-  #   dataset: /ParkingVBF7/Run2023D-22Sep2023_v1-v1/MINIAOD
-  #   isMC: False
-  #   version: D
-  # Run2023D7_v2:
-  #   dataset: /ParkingVBF7/Run2023D-22Sep2023_v2-v1/MINIAOD
-  #   isMC: False
-  #   version: D
+  ## 2023-D
+  Run2023D0_v1:
+    dataset: /ParkingVBF0/Run2023D-22Sep2023_v1-v1/MINIAOD
+    isMC: False
+    version: D
+  Run2023D0_v2:
+    dataset: /ParkingVBF0/Run2023D-22Sep2023_v2-v1/MINIAOD
+    isMC: False
+    version: D
+  Run2023D1_v1:
+    dataset: /ParkingVBF1/Run2023D-22Sep2023_v1-v1/MINIAOD
+    isMC: False
+    version: D
+  Run2023D1_v2:
+    dataset: /ParkingVBF1/Run2023D-22Sep2023_v2-v1/MINIAOD
+    isMC: False
+    version: D
+  Run2023D2_v1:
+    dataset: /ParkingVBF2/Run2023D-22Sep2023_v1-v1/MINIAOD
+    isMC: False
+    version: D
+  Run2023D2_v2:
+    dataset: /ParkingVBF2/Run2023D-22Sep2023_v2-v1/MINIAOD
+    isMC: False
+    version: D
+  Run2023D3_v1:
+    dataset: /ParkingVBF3/Run2023D-22Sep2023_v1-v1/MINIAOD
+    isMC: False
+    version: D
+  Run2023D3_v2:
+    dataset: /ParkingVBF3/Run2023D-22Sep2023_v2-v1/MINIAOD
+    isMC: False
+    version: D
+  Run2023D4_v1:
+    dataset: /ParkingVBF4/Run2023D-22Sep2023_v1-v1/MINIAOD
+    isMC: False
+    version: D
+  Run2023D4_v2:
+    dataset: /ParkingVBF4/Run2023D-22Sep2023_v2-v1/MINIAOD
+    isMC: False
+    version: D
+  Run2023D5_v1:
+    dataset: /ParkingVBF5/Run2023D-22Sep2023_v1-v1/MINIAOD
+    isMC: False
+    version: D
+  Run2023D5_v2:
+    dataset: /ParkingVBF5/Run2023D-22Sep2023_v2-v1/MINIAOD
+    isMC: False
+    version: D
+  Run2023D6_v1:
+    dataset: /ParkingVBF6/Run2023D-22Sep2023_v1-v1/MINIAOD
+    isMC: False
+    version: D
+  Run2023D6_v2:
+    dataset: /ParkingVBF6/Run2023D-22Sep2023_v2-v1/MINIAOD
+    isMC: False
+    version: D
+  Run2023D7_v1:
+    dataset: /ParkingVBF7/Run2023D-22Sep2023_v1-v1/MINIAOD
+    isMC: False
+    version: D
+  Run2023D7_v2:
+    dataset: /ParkingVBF7/Run2023D-22Sep2023_v2-v1/MINIAOD
+    isMC: False
+    version: D
 
   ## Signal Samples
   ## https://dpee.docs.cern.ch/Samples/signal/#vbf-production
   HAHM_VBF_13p6TeV_M1:
     dataset: /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024
     isMC: True
+    isSignal: True
     userInputFiles:
       - /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/HAHM_ZpToEE_M1_VBF_2JET_Leta2p5_Lpt0p5_Detajj3p5_MMjj1000_j1pt100_j2pt40_k1e_10_eps0p02_13p6TeV_MINIAOD.root
-  # HAHM_VBF_13p6TeV_M3p1:
-  #   dataset: /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024
-  #   isMC: True
-  #   userInputFiles:
-  #     - /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/HAHM_ZpToEE_M3p1_VBF_2JET_Leta2p5_Lpt0p5_Detajj3p5_MMjj1000_j1pt100_j2pt40_k1e_10_eps0p02_13p6TeV_MINIAOD.root
-  # HAHM_VBF_13p6TeV_M5:
-  #   dataset: /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024
-  #   isMC: True
-  #   userInputFiles:
-  #     - /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/HAHM_ZpToEE_M5_VBF_2JET_Leta2p5_Lpt0p5_Detajj3p5_MMjj1000_j1pt100_j2pt40_k1e_10_eps0p02_13p6TeV_MINIAOD.root
-  # HAHM_VBF_13p6TeV_M5p5:
-  #   dataset: /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024
-  #   isMC: True
-  #   userInputFiles:
-  #     - /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/HAHM_ZpToEE_M5P5_VBF_2JET_Leta2p5_Lpt0p5_JETCUTS_k1e_10_eps0p02_13p6TeV_MINIAOD.root
-  # HAHM_VBF_13p6TeV_M8:
-  #   dataset: /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024
-  #   isMC: True
-  #   userInputFiles:
-  #     - /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/HAHM_ZpToEE_M8_VBF_2JET_Leta2p5_Lpt0p5_JETCUTS_k1e_10_eps0p02_13p6TeV_MINIAOD.root
-  # HAHM_VBF_13p6TeV_M10:
-  #   dataset: /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024
-  #   isMC: True
-  #   userInputFiles:
-  #     - /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/HAHM_ZpToEE_M10_VBF_2JET_Leta2p5_Lpt0p5_JETCUTS_k1e_10_eps0p02_13p6TeV_MINIAOD.root
+  HAHM_VBF_13p6TeV_M3p1:
+    dataset: /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024
+    isMC: True
+    isSignal: True
+    userInputFiles:
+      - /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/HAHM_ZpToEE_M3p1_VBF_2JET_Leta2p5_Lpt0p5_Detajj3p5_MMjj1000_j1pt100_j2pt40_k1e_10_eps0p02_13p6TeV_MINIAOD.root
+  HAHM_VBF_13p6TeV_M5:
+    dataset: /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024
+    isMC: True
+    isSignal: True
+    userInputFiles:
+      - /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/HAHM_ZpToEE_M5_VBF_2JET_Leta2p5_Lpt0p5_Detajj3p5_MMjj1000_j1pt100_j2pt40_k1e_10_eps0p02_13p6TeV_MINIAOD.root
+  HAHM_VBF_13p6TeV_M5p5:
+    dataset: /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024
+    isMC: True
+    isSignal: True
+    userInputFiles:
+      - /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/HAHM_ZpToEE_M5P5_VBF_2JET_Leta2p5_Lpt0p5_JETCUTS_k1e_10_eps0p02_13p6TeV_MINIAOD.root
+  HAHM_VBF_13p6TeV_M8:
+    dataset: /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024
+    isMC: True
+    isSignal: True
+    userInputFiles:
+      - /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/HAHM_ZpToEE_M8_VBF_2JET_Leta2p5_Lpt0p5_JETCUTS_k1e_10_eps0p02_13p6TeV_MINIAOD.root
+  HAHM_VBF_13p6TeV_M10:
+    dataset: /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024
+    isMC: True
+    isSignal: True
+    userInputFiles:
+      - /store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/HAHM_ZpToEE_M10_VBF_2JET_Leta2p5_Lpt0p5_JETCUTS_k1e_10_eps0p02_13p6TeV_MINIAOD.root
 
 
 
