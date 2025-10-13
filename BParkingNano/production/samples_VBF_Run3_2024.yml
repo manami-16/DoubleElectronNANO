@@ -25,20 +25,28 @@ samples:
   ## 2024-B
   Run2024B0_v1:
     dataset: /ParkingVBF0/Run2024B-PromptReco-v1/MINIAOD
+    version: B
   Run2024B1_v1:
     dataset: /ParkingVBF1/Run2024B-PromptReco-v1/MINIAOD
+    version: B
   Run2024B2_v1:
     dataset: /ParkingVBF2/Run2024B-PromptReco-v1/MINIAOD
+    version: B
   Run2024B3_v1:
     dataset: /ParkingVBF3/Run2024B-PromptReco-v1/MINIAOD
+    version: B
   Run2024B4_v1:
     dataset: /ParkingVBF4/Run2024B-PromptReco-v1/MINIAOD
+    version: B
   Run2024B5_v1:
     dataset: /ParkingVBF5/Run2024B-PromptReco-v1/MINIAOD
+    version: B
   Run2024B6_v1:
     dataset: /ParkingVBF6/Run2024B-PromptReco-v1/MINIAOD
+    version: B
   Run2024B7_v1:
     dataset: /ParkingVBF7/Run2024B-PromptReco-v1/MINIAOD
+    version: B
 
   ## 2024-C
   Run2024C0_MINIv6:

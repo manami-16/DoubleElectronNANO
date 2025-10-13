@@ -290,7 +290,11 @@ elif options.mode == "vbf":
         else:
             modifiers.append(vbfSkimming2023_D)
     elif options.year == 2024:
-        modifiers.append(vbfSkimming2024)
+        if options.version == 'B':
+            modifiers.append(customBoostedTausTable)
+            modifiers.append(vbfSkimming2024)
+        else:
+            modifiers.append(vbfSkimming2024)
 
 if options.saveRegressionVars:
     # Save regression variables
