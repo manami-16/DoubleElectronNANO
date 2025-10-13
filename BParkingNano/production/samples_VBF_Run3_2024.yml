@@ -16,7 +16,8 @@ common:
     lhcRun: 3
     tag: '2024VBF' ## produced nanoAOD root filename
     lumiMask: 'https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions24/Cert_Collisions2024_378981_386951_Golden.json'
-
+    splitting: 20
+    
 samples:
   ## 2024-A
   ## No HLT_VBF paths were applied to 2024-A parking data -> skip
