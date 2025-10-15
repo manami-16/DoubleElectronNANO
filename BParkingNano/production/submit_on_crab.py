@@ -65,10 +65,11 @@ if __name__ == '__main__':
     for sample, info in doc['samples'].items():
         # Input DBS
         input_dbs = info['dbs'] if 'dbs' in info else None
-        isMC = info['isMC']
+        isMC = info['isMC'] if 'isMC' in info else False
         version = info['version'] if 'version' in info else 'Z'
         isSignal = info['isSignal'] if 'isSignal' in info else False
-
+        isMinBias = info['isMinBias'] if 'isMinBias' in info else False
+        
         config.Data.inputDBS = input_dbs if input_dbs is not None else 'global'
 
         print(f'submitting -- {sample}')
