@@ -13,7 +13,7 @@ Running: brilcalc lumi --normtag /cvmfs/cms-bril.cern.ch/cms-lumi-pog/Normtags/n
 
 Warning: problems found in merging -i and --normtag selections:
   in run 359661 [[40, 232]] is not a superset of [[42, 233]]
-✅ Output saved to: lumi_outputs/2022_G_lumi.csv
+Output saved to: lumi_outputs/2022_G_lumi.csv
 
 Verifying lumi sums for 2022 G...
    📊 Calculated recorded sum: 3.082753035 /fb
@@ -26,7 +26,7 @@ Verifying lumi sums for 2022 G...
 ```
 2022: 
   Lumi: Cert_Collisions2022_355100_362760_Golden.json
-  era:
+  subera:
     C: [355862, 357482]
     D: [357538, 357900]
     E: [359022, 360331]
@@ -36,7 +36,7 @@ Verifying lumi sums for 2022 G...
 ```
 **Explanation:**
 - **`Lumi`**: JSON file defining certified runs, downloadable from the [CMS Certification page](https://cms-service-dqmdc.web.cern.ch/CAF/certification/).
-- **`era`**: Specify the run ranges of interest in the format `[begin, end]`.
+- **`subera`**: Specify the run ranges of interest in the format `[begin, end]`.
     - You can look up run numbers using [CMSDAS](https://cmsweb.cern.ch/das/).
 
 #### 2. Download corresponding `*_Golden.json` under `brilcalc/` directory. 
