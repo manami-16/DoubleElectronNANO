@@ -1,34 +1,22 @@
-
-# For pT = [0, 10], JPsi 
-## import root files
-## root_path = '/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/crab_JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8_2023BPix/251002_142838/0000'
-
-'''
-For each reco ele, 
-1. if Electron_genPartFlav == 1: signal
-2. else: background
-
-Then, plot a histogram (pT vs #ele) for sig and bkg
-'''
-
-
 import uproot
 import awkward as ak
 from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 
+
+flav_map = {0: 'Unknown', 1: 'prompt ele', '15': 'ele from prompt tau', 22: 'prompt photon', 511: 'from B0', 521:'from B+/-'}
 root_dirs = {
 	'2022_2023_JPsiToEE_pth10toInf': 
 	[
 		'/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/JPsiToEE_pth10toInf_TuneCP5_13p6TeV_pythia8/crab_JPsiToEE_pth10toInf_TuneCP5_13p6TeV_pythia8_2023BPix/251007_142912/0000/',
 		'/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/JPsiToEE_pth10toInf_TuneCP5_13p6TeV_pythia8/crab_JPsiToEE_pth10toInf_TuneCP5_13p6TeV_pythia8_2022postEE/251024_130738/0000/'
 	], 
-	# '2022_2023_JPsiToEE_pth0to10_postBfix':
-	# [
-	# 	'/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/crab_JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8_2022postEE/251024_130707/0000/',
-    # 	'/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/crab_JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8_2023BPix/251002_142838/0000/',
-    # ]
+	'2022_2023_JPsiToEE_pth0to10_postBfix':
+	[
+		'/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/crab_JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8_2022postEE/251024_130707/0000/',
+    	'/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/crab_JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8_2023BPix/251002_142838/0000/',
+    ]
 }
 
 def plot_pTs(dataset, flav_pts, total_entries, total_flav, output_dir, fig_name, plot_range=(0, 15), genPartFlav=0):
@@ -36,14 +24,14 @@ def plot_pTs(dataset, flav_pts, total_entries, total_flav, output_dir, fig_name,
     pt_sig = np.array(pt_sig)
 
     # get pT for all bkg: genPartFlav != 0
-    # pt_bkg = ak.flatten([flav_pts[f] for f in flav_pts if f != genPartFlav])
     pt_bkg = np.concatenate([np.array(ak.flatten(flav_pts[f])) for f in flav_pts if f != genPartFlav])
 
-    if len(pt_sig) > 0 and len(pt_bkg) > 0:
+    if len(pt_sig) > 0:
         plt.figure(figsize=(7,5))
         bins = np.linspace(plot_range[0], plot_range[1], 50)
-        plt.hist(pt_sig, bins=bins, range=plot_range, histtype='step', linewidth=1.5, label=f"Signal")
-        plt.hist(pt_bkg, bins=bins, range=plot_range, histtype='step', linewidth=1.5, label=f"Background", color='orange')
+        plt.hist(pt_sig, bins=bins, range=plot_range, histtype='step', linewidth=1.5, label=f"Signal", color='orange')
+        # plt.hist(pt_bkg, bins=bins, range=plot_range, histtype='step', linewidth=1.5, label=f"Background", color='blue')
+        # plt.legend(loc='upper right')
 
         plt.xlabel("Electron $p_T$ [GeV]")
         plt.ylabel("Count")
@@ -53,9 +41,9 @@ def plot_pTs(dataset, flav_pts, total_entries, total_flav, output_dir, fig_name,
         textstr = '\n'.join((
         	f'Signal -- ',
             f'Total events: {total_entries:,}',
-            f'Electrons (flav={genPartFlav}): {total_flav[0]:,}',
+            f'Electrons (flav={genPartFlav}): {total_flav[genPartFlav]:,}',
             f'Avg pT (Sig): {np.mean(pt_sig):.2f} GeV',
-            f'Avg pT (Bkg): {np.mean(pt_bkg):.2f} GeV',
+            # f'Avg pT (Bkg): {np.mean(pt_bkg):.2f} GeV',
         ))
 
         plt.gca().text(
@@ -68,8 +56,41 @@ def plot_pTs(dataset, flav_pts, total_entries, total_flav, output_dir, fig_name,
         plt.savefig(f'{output_dir}/{fig_name}', dpi=300)
         plt.close()
         print(f'the plot was saved in {output_dir}/{fig_name}')
+        print('==='*5)
     else:
     	print(len(pt_sig), len(pt_bkg))
+
+def plot_genPartFlav(dataset, total_flav, genPartFlav, total_entries, output_dir, fig_name):
+    # Prepare data for plotting
+    x_labels = [str(flav) for flav in genPartFlav]
+    y_counts = [total_flav[flav] for flav in genPartFlav]
+
+    plt.figure(figsize=(7, 5))
+    bars = plt.bar(x_labels, y_counts, color='royalblue', alpha=0.7, edgecolor='black')
+
+    # Annotate counts above bars
+    for bar, count in zip(bars, y_counts):
+        plt.text(bar.get_x() + bar.get_width()/2, bar.get_height(), f'{int(count)}',
+                 ha='center', va='bottom', fontsize=9)
+
+    plt.yscale('log')
+    plt.xlabel("Electron_genPartFlav")
+    plt.ylabel("Number of Electrons")
+    plt.title(f"{dataset}: Electron_genPartFlav Distribution")
+
+    # Add text box for total entries
+    textstr = f"Total entries: {total_entries}\nTotal electrons: {sum(y_counts)}"
+    plt.gca().text(
+        0.97, 0.05, textstr, transform=plt.gca().transAxes,
+        fontsize=10, verticalalignment='top', horizontalalignment='right',
+        bbox=dict(boxstyle='round,pad=0.4', facecolor='white', alpha=0.8)
+    )
+
+    plt.tight_layout()
+    plt.savefig(f'{output_dir}/{fig_name}', dpi=300)
+    plt.close()
+
+
 
 def process_root(dataset, dirs):
 	total_entries = 0
@@ -114,10 +135,22 @@ def process_root(dataset, dirs):
 				'total_entries': total_entries, 
 				'plot_range': (0, 15), 
 				'total_flav': total_flav,
-				'genPartFlav': 0,
+				'output_dir': '/eos/user/m/mkanemur/WebEOS/WorkingPoint'}
+
+	plot_arg = {'dataset': dataset, 
+				'total_flav': total_flav,
+				'genPartFlav': genPartFlav,
+				'total_entries': total_entries, 
 				'output_dir': '/eos/user/m/mkanemur/WebEOS/WorkingPoint',
-				'fig_name': f'{dataset}_v1.png'}
-	plot_pTs(**plot_arg)
+				'fig_name': f'genPartFlav_dist_{dataset}.png'}
+	plot_genPartFlav(**plot_arg)
+
+	# for flav in genPartFlav:
+	# 	plot_arg['genPartFlav'] = flav
+	# 	plot_arg['fig_name'] = f'flav{flav}_{dataset}.png'
+
+	# 	print(f'Plotting genPartFlav={flav}...')
+	# 	plot_pTs(**plot_arg)
 
 
 for dataset, dirs in root_dirs.items():
