@@ -4,8 +4,15 @@ from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 
+# source: https://github.com/cms-sw/cmssw/blob/c1b84d22fdf538675959e10095c0fc9b7c36cf6c/PhysicsTools/NanoAOD/plugins/CandMCMatchTableProducer.cc#L50-L57
+flav_map = {0: 'unmatched', 
+			1: 'prompt ele', 
+			15: 'ele from prompt tau', 
+			22: 'prompt photon', 
+			5: 'ele from B', 
+			4:'ele from c', 
+			3: 'ele from light or unknown'}
 
-flav_map = {0: 'Unknown', 1: 'prompt ele', '15': 'ele from prompt tau', 22: 'prompt photon', 511: 'from B0', 521:'from B+/-'}
 root_dirs = {
 	'2022_2023_JPsiToEE_pth10toInf': 
 	[
@@ -90,11 +97,9 @@ def plot_genPartFlav(dataset, total_flav, genPartFlav, total_entries, output_dir
     plt.savefig(f'{output_dir}/{fig_name}', dpi=300)
     plt.close()
 
-
-
 def process_root(dataset, dirs):
 	total_entries = 0
-	genPartFlav = [1, 15, 22, 511, 0]
+	genPartFlav = [1, 15, 22, 5, 4, 3, 0]
 	total_flav = {f: 0 for f in genPartFlav}
 	flav_pts = {f: [] for f in genPartFlav}
 
@@ -130,13 +135,7 @@ def process_root(dataset, dirs):
 		print(f"Flav {flav}: {total_flav[flav]} electrons, pT count: {len(flav_pts[flav])}")
 
 	## make a hist
-	plot_arg = {'dataset': dataset, 
-				'flav_pts': flav_pts, 
-				'total_entries': total_entries, 
-				'plot_range': (0, 15), 
-				'total_flav': total_flav,
-				'output_dir': '/eos/user/m/mkanemur/WebEOS/WorkingPoint'}
-
+	## plot a hist of genPartFlav distribution
 	plot_arg = {'dataset': dataset, 
 				'total_flav': total_flav,
 				'genPartFlav': genPartFlav,
@@ -145,10 +144,11 @@ def process_root(dataset, dirs):
 				'fig_name': f'genPartFlav_dist_{dataset}.png'}
 	plot_genPartFlav(**plot_arg)
 
+	## plot a hist of pT distribution for each genPartFlav
 	# for flav in genPartFlav:
 	# 	plot_arg['genPartFlav'] = flav
-	# 	plot_arg['fig_name'] = f'flav{flav}_{dataset}.png'
-
+	# 	plot_arg['fig_name'] = f'flav{flav}_pT_dist_{dataset}.png'
+	# 	plot_arg['flav_pts'] = flav_pts
 	# 	print(f'Plotting genPartFlav={flav}...')
 	# 	plot_pTs(**plot_arg)
 
