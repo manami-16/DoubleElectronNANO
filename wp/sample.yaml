@@ -1,20 +1,20 @@
-HAHM_Inclusive:
-  - M1:
-    - '/eos/cms/store/group/cmst3/group/xee/tree_v1/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/allnanoColl/HAHM_DarkPhoton_13p6TeV_Nov2024/crab_HAHM_13p6TeV_M1/251010_190059/0000/'
-  - M3p1:
-    - '/eos/cms/store/group/cmst3/group/xee/tree_v1/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/allnanoColl/HAHM_DarkPhoton_13p6TeV_Nov2024/crab_HAHM_13p6TeV_M3p1/251010_190051/0000/'
-  - M5:
-    - '/eos/cms/store/group/cmst3/group/xee/tree_v1/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/allnanoColl/HAHM_DarkPhoton_13p6TeV_Nov2024/crab_HAHM_13p6TeV_M5/251010_190043/0000/'
-  - M5p5:
-    - '/eos/cms/store/group/cmst3/group/xee/tree_v1/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/allnanoColl/HAHM_DarkPhoton_13p6TeV_Nov2024/crab_HAHM_13p6TeV_M5p5/251010_190035/0000/'
-  - M6:
-    - '/eos/cms/store/group/cmst3/group/xee/tree_v1/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/allnanoColl/HAHM_DarkPhoton_13p6TeV_Nov2024/crab_HAHM_13p6TeV_M6/251010_190027/0000/'
-  - M6p5:
-    - '/eos/cms/store/group/cmst3/group/xee/tree_v1/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/allnanoColl/HAHM_DarkPhoton_13p6TeV_Nov2024/crab_HAHM_13p6TeV_M6p5/251010_171612/0000/'
-  - M8:
-    - '/eos/cms/store/group/cmst3/group/xee/tree_v1/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/allnanoColl/HAHM_DarkPhoton_13p6TeV_Nov2024/crab_HAHM_13p6TeV_M8/251104_134130/0000/'
-  - M10:
-    - '/eos/cms/store/group/cmst3/group/xee/tree_v1/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/allnanoColl/HAHM_DarkPhoton_13p6TeV_Nov2024/crab_HAHM_13p6TeV_M10/251104_122931/0000/'
+# HAHM_Inclusive:
+#   - M1:
+#     - '/eos/cms/store/group/cmst3/group/xee/tree_v1/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/allnanoColl/HAHM_DarkPhoton_13p6TeV_Nov2024/crab_HAHM_13p6TeV_M1/251010_190059/0000/'
+#   - M3p1:
+#     - '/eos/cms/store/group/cmst3/group/xee/tree_v1/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/allnanoColl/HAHM_DarkPhoton_13p6TeV_Nov2024/crab_HAHM_13p6TeV_M3p1/251010_190051/0000/'
+#   - M5:
+#     - '/eos/cms/store/group/cmst3/group/xee/tree_v1/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/allnanoColl/HAHM_DarkPhoton_13p6TeV_Nov2024/crab_HAHM_13p6TeV_M5/251010_190043/0000/'
+#   - M5p5:
+#     - '/eos/cms/store/group/cmst3/group/xee/tree_v1/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/allnanoColl/HAHM_DarkPhoton_13p6TeV_Nov2024/crab_HAHM_13p6TeV_M5p5/251010_190035/0000/'
+#   - M6:
+#     - '/eos/cms/store/group/cmst3/group/xee/tree_v1/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/allnanoColl/HAHM_DarkPhoton_13p6TeV_Nov2024/crab_HAHM_13p6TeV_M6/251010_190027/0000/'
+#   - M6p5:
+#     - '/eos/cms/store/group/cmst3/group/xee/tree_v1/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/allnanoColl/HAHM_DarkPhoton_13p6TeV_Nov2024/crab_HAHM_13p6TeV_M6p5/251010_171612/0000/'
+#   - M8:
+#     - '/eos/cms/store/group/cmst3/group/xee/tree_v1/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/allnanoColl/HAHM_DarkPhoton_13p6TeV_Nov2024/crab_HAHM_13p6TeV_M8/251104_134130/0000/'
+#   - M10:
+#     - '/eos/cms/store/group/cmst3/group/xee/tree_v1/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/allnanoColl/HAHM_DarkPhoton_13p6TeV_Nov2024/crab_HAHM_13p6TeV_M10/251104_122931/0000/'
 
 HAHM_VBF:
   - M1:
@@ -29,3 +29,11 @@ HAHM_VBF:
     - '/eos/cms/store/group/cmst3/group/xee/tree_v1/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/allnanoColl/HAHM_DarkPhoton_13p6TeV_Nov2024/crab_HAHM_VBF_13p6TeV_M8/251010_185815/0000/'
   - M10:
     - '/eos/cms/store/group/cmst3/group/xee/tree_v1/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/allnanoColl/HAHM_DarkPhoton_13p6TeV_Nov2024/crab_HAHM_VBF_13p6TeV_M10/251010_185823/0000/'
+
+# JPsiToEE_pth10toInf:
+#   - '/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/JPsiToEE_pth10toInf_TuneCP5_13p6TeV_pythia8/crab_JPsiToEE_pth10toInf_TuneCP5_13p6TeV_pythia8_2023BPix/251007_142912/0000/'
+  # - '/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/JPsiToEE_pth10toInf_TuneCP5_13p6TeV_pythia8/crab_JPsiToEE_pth10toInf_TuneCP5_13p6TeV_pythia8_2022postEE/251024_130738/0000/'
+
+# JPsiToEE_pth0to10:
+#   - '/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/crab_JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8_2022postEE/251024_130707/0000/'
+#   - '/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/crab_JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8_2023BPix/251002_142838/0000/'

@@ -4,6 +4,11 @@ from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import yaml
+import process_root
+import subprocess
+import pickle
+from Electron_Kinematics_Plotter import aggregate_data, plot_kinematics, plot_id
 
 # source: https://github.com/cms-sw/cmssw/blob/c1b84d22fdf538675959e10095c0fc9b7c36cf6c/PhysicsTools/NanoAOD/plugins/CandMCMatchTableProducer.cc#L50-L57
 flav_map = {0: 'unmatched', 
@@ -16,276 +21,173 @@ flav_map = {0: 'unmatched',
 
 plot_output_dir = '/eos/user/m/mkanemur/WebEOS/WorkingPoint'
 
-root_dirs = {
+
+# root_dirs = {
 	# '2022_2023_JPsiToEE_pth10toInf': 
 	# [
 	# 	'/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/JPsiToEE_pth10toInf_TuneCP5_13p6TeV_pythia8/crab_JPsiToEE_pth10toInf_TuneCP5_13p6TeV_pythia8_2023BPix/251007_142912/0000/',
 	# 	'/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/JPsiToEE_pth10toInf_TuneCP5_13p6TeV_pythia8/crab_JPsiToEE_pth10toInf_TuneCP5_13p6TeV_pythia8_2022postEE/251024_130738/0000/'
 	# ], 
-	'2022_2023_JPsiToEE_pth0to10_postBfix':
-	[
-		'/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/crab_JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8_2022postEE/251024_130707/0000/',
-		'/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/crab_JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8_2023BPix/251002_142838/0000/',
-	],
-	# 'INCL_HAHM_13p6TeV_M6p5':
+	# '2022_2023_JPsiToEE_pth0to10_postBPix':
 	# [
-	# 	'/eos/cms/store/group/cmst3/group/xee/tree_v1/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/allnanoColl/HAHM_DarkPhoton_13p6TeV_Nov2024/crab_HAHM_13p6TeV_M6p5/251010_171612/0000/'
+	# 	'/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/crab_JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8_2022postEE/251024_130707/0000/',
+	# 	'/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/crab_JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8_2023BPix/251002_142838/0000/',
+	# ],
+	# '2022_2023_BuToKJpsi_Toee_postBPix':
+	# [
+	# 	'/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/BuToKJPsi_JPsiToEE_SoftQCD_TuneCP5_13p6TeV_pythia8-evtgen/crab_BuToKJpsi_Toee_2022postEE_v2/251024_130643/0000',
+	# 	'/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/BuToKJPsi_JPsiToEE_SoftQCD_TuneCP5_13p6TeV_pythia8-evtgen/crab_BuToKJpsi_Toee_2022postEE_v6/251024_130632/0000',
+	# 	'/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/BuToKJPsi_JPsiToEE_SoftQCD_TuneCP5_13p6TeV_pythia8-evtgen/crab_BuToKJpsi_Toee_2023BPix/251002_142819/0000',
+	# ],
+	# '2022_2023_UpsilonToEE_pth0to10_postBPix':
+	# [
+	# 	'/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/UpsilonToEE_pth0to10_TuneCP5_13p6TeV_pythia8/crab_UpsilonToEE_pth0to10_TuneCP5_13p6TeV_pythia8_2022postEE/251024_130800/0000',
+	# 	'/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/UpsilonToEE_pth0to10_TuneCP5_13p6TeV_pythia8/crab_UpsilonToEE_pth0to10_TuneCP5_13p6TeV_pythia8_2023BPix/251007_142925/0000',
+	# ],
+	# '2022_2023_UpsilonToEE_pth10toInf_postBPix':
+	# [
+	# 	'/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/UpsilonToEE_pth10toInf_TuneCP5_13p6TeV_pythia8/crab_UpsilonToEE_pth10toInf_TuneCP5_13p6TeV_pythia8_2022postEE/251024_130822/0000',
+	# 	'/eos/cms/store/group/cmst3/group/xee/tree_v1/backgroundSamples/allnanoColl/UpsilonToEE_pth10toInf_TuneCP5_13p6TeV_pythia8/crab_UpsilonToEE_pth10toInf_TuneCP5_13p6TeV_pythia8_2023BPix/251007_142939/0000',
+	# ],
+	# 'Bhagya_PromptJPsi_Samples':
+	# [
+	# 	# '/eos/cms/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/055136d3-bf98-4e2b-b3e0-c732e7c47cfe.root',
+	# 	# '/eos/cms/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/05c8e58b-b4bd-4067-9fc3-899ccb58c563.root',
+	# 	# '/eos/cms/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/0d48d151-2dd4-44dd-bf94-2df844ca72be.root',
+	# 	# '/eos/cms/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/11cbb431-ba38-4de6-946e-18b133660e46.root',
+	# 	# '/eos/cms/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/152f83df-329d-455f-b6cd-cdb359cf51e4.root',
+	# 	# '/eos/cms/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/184d427f-8dbb-4db1-a510-458965c44f58.root',
+	# 	# '/eos/cms/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/1979c76b-1d30-4a0e-b5d2-a20961e61d22.root',
+	# 	# '/eos/cms/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/19d9c655-1fbb-4dc5-85b3-4a110b2583db.root',
+	# 	# '/eos/cms/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/1c2ae1c8-4704-475b-bbef-60107f821692.root',
+	# 	# '/eos/cms/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/1cf0a568-c286-449e-ac3b-65d9459027c5.root',
+	# 	# '/eos/cms/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/1db9e92f-e913-436c-a4b4-1d835333dfec.root',
+	# 	# '/eos/cms/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/1e51cdd1-9db8-45c9-914b-8f42fc2bd62b.root',
+	# 	# '/eos/cms/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/26dc6017-47c8-4d41-b3d5-6249ef5db06e.root',
+	# 	# '/eos/cms/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/274efecd-80e7-4db3-8960-3850f2b6311a.root',
+	# 	# '/eos/cms/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/2a402d72-1b85-4e71-b5cf-478297d9984b.root',
+	# 	# '/eos/cms/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/2a508317-b0dd-44d8-9afa-29a10797b2f1.root',
+	# 	# '/eos/cms/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/2bc7dc7c-6561-491b-83ed-1877e3ec7935.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/2f316968-d0bd-48a1-b9b3-0c541f5a89d3.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/33ffca85-549e-4d95-95d5-9e0d8ef8034c.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/340b1b71-76fd-4882-a448-7b671ae2c466.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/3ab19408-4a7d-4b9c-b5dc-8b3a0b84a330.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/3ba4e639-6089-45e9-af4a-3aa09434d29d.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/4162877b-494f-4c5e-b914-33f52b0dbd81.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/46492e91-ab4e-4cb7-a6da-4cdca33a984a.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/476e5e91-3391-4374-95b5-e43f19e29179.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/47d4d61b-4bac-4974-b85b-17e7e2350005.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/4821c5ee-161f-4f19-8e16-82a6205fd55d.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/4a14d253-3e6a-4cda-9395-44cd46e96cf5.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/4b54e865-878c-4076-894c-4804cae1d352.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/4c7e378a-682b-428e-9e0b-c7d8de51e78b.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/5440942f-72bd-4232-98ce-8aa952219af3.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/5a76b425-1b9b-4193-96b8-044c8560dcf5.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/613bfe55-13a3-43e2-bd9a-a84db5df6075.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/660762f4-307e-488e-a5e4-978bdbcd1b55.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/66dba9ca-aa0e-4c01-87fe-585278c3581c.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/6b7a72aa-61b0-42bb-bc91-74ddd25b4239.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/6c26be1b-24d8-445a-8e46-58422519160b.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/7152a3c8-2d16-46ff-a3e3-ab40d1197b21.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/72823f27-47d9-470a-bc98-62d3f8bb7e23.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/7453dd8e-4aa9-41b1-bc95-ee837fca7e84.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/8011c229-35b0-42e0-bf77-6cb7c07d7109.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/86502309-83a0-4168-b47d-17aee742d37d.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/869474ce-f796-4a5b-a7bb-a619f0989ba9.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/8696babc-15bc-49a4-942c-48a92908c868.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/86f15951-5e22-45c8-9780-9b85866170d0.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/8f0fb1c8-6a6d-48de-8a3e-20876993a349.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/9a50ee3b-6ad6-4a45-877a-713098fc885f.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/9ab38f1e-adf9-4fbd-b4ca-60501372f1a7.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/ad8f4267-f34d-445d-9112-258e39e8ed44.root',
+	# 	# '/store/mc/Run3Summer23MiniAODv4/JPsiToEE_pth0to10_TuneCP5_13p6TeV_pythia8/MINIAODSIM/130X_mcRun3_2023_realistic_v15-v2/100000/af8f8a57-44a5-4f7d-b669-bef91f8c8d14.root'
 	# ]
-}
-
-def plot_pTs(dataset, flav_pts, total_entries, total_flav, output_dir, fig_name, plot_range=(0, 15), genPartFlav=0):
-	pt_sig = ak.flatten(flav_pts[genPartFlav])
-	pt_sig = np.array(pt_sig)
-
-	# get pT for all bkg: genPartFlav != 0
-	pt_bkg = np.concatenate([np.array(ak.flatten(flav_pts[f])) for f in flav_pts if f != genPartFlav])
-
-	if len(pt_sig) > 0:
-		plt.figure(figsize=(7,5))
-		bins = np.linspace(plot_range[0], plot_range[1], 50)
-		plt.hist(pt_sig, bins=bins, range=plot_range, histtype='step', linewidth=1.5, label=f"Signal", color='orange')
-		# plt.hist(pt_bkg, bins=bins, range=plot_range, histtype='step', linewidth=1.5, label=f"Background", color='blue')
-		# plt.legend(loc='upper right')
-
-		plt.xlabel("Electron $p_T$ [GeV]")
-		plt.ylabel("Count")
-		plt.title(f"Electron $p_T$ Distribution (genPartFlav = {genPartFlav})\n{dataset}")
-
-		## textbox at top left
-		textstr = '\n'.join((
-			f'Signal -- ',
-			f'Total events: {total_entries:,}',
-			f'Electrons (flav={genPartFlav}): {total_flav[genPartFlav]:,}',
-			f'Avg pT (Sig): {np.mean(pt_sig):.2f} GeV',
-			# f'Avg pT (Bkg): {np.mean(pt_bkg):.2f} GeV',
-		))
-
-		plt.gca().text(
-			0.97, 0.80, textstr, transform=plt.gca().transAxes,
-			fontsize=10, verticalalignment='top', horizontalalignment='right',
-			bbox=dict(boxstyle='round,pad=0.4', facecolor='white', alpha=0.8)
-		)
-
-		plt.tight_layout()
-		plt.savefig(f'{output_dir}/{fig_name}', dpi=300)
-		plt.close()
-		print(f'the plot was saved in {output_dir}/{fig_name}')
-		print('==='*5)
-	else:
-		print(len(pt_sig), len(pt_bkg))
-
-def plot_genPartFlav(dataset, dataset_name, fig_name):
-	genPartFlav_list = [1, 15, 22, 5, 4, 3, 0]
-	genPartStatusFlag_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-
-	genPartFlav_data = np.array(ak.flatten(dataset['Electron_genPartFlav']))
-	pt_data = np.array(ak.flatten(dataset['Electron_pt']))
-	genPartStatusFlag_data = np.array(ak.flatten(dataset['GenPart_statusFlags']))
-
-	total_flav = {f: 0 for f in genPartFlav_list}
-	flav_pts = {f: [] for f in genPartFlav_list}
-	unexpected_flav = set()
-	total_status_flag = {f: 0 for f in genPartStatusFlag_list}
-	statusFlag_pts = {f: [] for f in genPartFlav_list}
-
-	## count the electrons and store pt
-	for flav, pt in zip(genPartFlav_data, pt_data):
-		if flav in total_flav:
-			total_flav[flav] += 1
-			flav_pts[flav].append(pt)
-		else:
-			unexpected_flav.add(flav)
-
-	##Print the countings
-	print(f'Electron counts per genPartFlav for {dataset_name}:')
-	for flav in genPartFlav_list:
-		print(f"	Electron_genPartFlav {flav}: {total_flav[flav]}")
-	if unexpected_flav:
-		print(f'	Unexpected genPartFlav found: {sorted(unexpected_flav)}')
-
-	## ==================================================================== ##
-	## plotting hist of genPartFlav
-	x_labels = [str(f) for f in genPartFlav_list]
-	y_counts = [total_flav[f] for f in genPartFlav_list]
-
-	plt.figure(figsize=(8,5))
-	bars = plt.bar(x_labels, y_counts, color='royalblue', alpha=0.7, edgecolor='black')
-
-	for bar, count in zip(bars, y_counts):
-		plt.text(bar.get_x() + bar.get_width()/2, bar.get_height(), f'{int(count)}',
-				 ha='center', va='bottom', fontsize=9)
-
-	plt.yscale('log')
-	plt.xlabel("Electron_genPartFlav")
-	plt.ylabel("Number of Electrons")
-	plt.title(f"{dataset_name}: Electron_genPartFlav Distribution")
-
-	total_entries = len(genPartFlav_data)
-	textstr = f"Total entries: {total_entries}\nTotal electrons: {sum(y_counts)}"
-	plt.gca().text(
-		0.97, 0.05, textstr, transform=plt.gca().transAxes,
-		fontsize=10, verticalalignment='top', horizontalalignment='right',
-		bbox=dict(boxstyle='round,pad=0.4', facecolor='white', alpha=0.8)
-	)
-
-	plt.tight_layout()
-	output_dir = f'{plot_output_dir}/{dataset_name}/{fig_name}'
-	os.makedirs(f'{plot_output_dir}/{dataset_name}', exist_ok=True)	
-	plt.savefig(f'{output_dir}_Electron_genPartFlavcounts.png', dpi=300)
-	plt.close()
-	print(f'==== the plot was saved in {output_dir}/{fig_name}_pt.png')
-
-	## ==================================================================== ##
-	## plotting hist of genPartStatusFlag
-	unique_flags, counts = np.unique(genPartStatusFlag_data, return_counts=True)
-	y_counts = [counts[np.where(unique_flags == f)[0][0]] if f in unique_flags else 0 for f in genPartStatusFlag_list]
-	x_labels = [str(f) for f in genPartStatusFlag_list]
-
-	plt.figure(figsize=(8,5))
-	bars = plt.bar(x_labels, y_counts, color='royalblue', alpha=0.7, edgecolor='black')
-
-	for bar, count in zip(bars, y_counts):
-		plt.text(bar.get_x() + bar.get_width()/2, bar.get_height(), f'{int(count)}',
-				 ha='center', va='bottom', fontsize=9)
-
-	plt.yscale('log')
-	plt.xlabel("genPartStatusFlag")
-	plt.ylabel("Number of Electrons")
-	plt.title(f"{dataset_name}: genPartStatusFlag Distribution")
-
-	total_entries = len(genPartStatusFlag_data)
-	textstr = f"Total entries: {total_entries}\nTotal electrons: {sum(y_counts)}"
-	plt.gca().text(
-		0.97, 0.05, textstr, transform=plt.gca().transAxes,
-		fontsize=10, verticalalignment='top', horizontalalignment='right',
-		bbox=dict(boxstyle='round,pad=0.4', facecolor='white', alpha=0.8)
-	)
-
-	plt.tight_layout()
-	output_dir = f'{plot_output_dir}/{dataset_name}/{fig_name}'
-	os.makedirs(f'{plot_output_dir}/{dataset_name}', exist_ok=True)	
-	plt.savefig(f'{output_dir}_genPartStatusFlag.png', dpi=300)
-	plt.close()
-	print(f'==== the plot was saved in {output_dir}/{fig_name}_genPartStatusFlag.png')
-
-	## ==================================================================== ##
-	## plotting pt for each genPartFlav
-	plt.figure(figsize=(8,5))
-	# bins = np.linspace(0, max(pt_data)*1.1, 50)
-	bins = (0, 15)
-	for flav in genPartFlav_list:
-		if len(flav_pts[flav]) > 0:
-			plt.hist(flav_pts[flav], bins=bins, histtype='step', linewidth=1.5, alpha=0.6, label=f'genPartFlav {flav}')
-
-	plt.xlabel("Electron_pt [GeV]")
-	plt.ylabel("Number of Electrons")
-	plt.title(f"{dataset_name}: Electron_pt Distribution by genPartFlav")
-	plt.legend()
-	plt.yscale('log')
-	plt.tight_layout()
-	plt.savefig(f'{output_dir}_Electron_pt.png', dpi=300)
-	plt.close()
-	print(f'==== the plot was saved in {output_dir}/{fig_name}_pt.png')
-
-	return None
-def process_root(dirs, columns_of_interest:list):
-	total_entries = 0
-	collected_arrays = {col: [] for col in columns_of_interest}
-
-	for dir_path in dirs:
-		dir_path = Path(dir_path)
-		for root_path in dir_path.glob("*.root"):
-			try:
-				with uproot.open(root_path) as f:
-					tree = f["Events;1"] if "Events;1" in f else f["Events"]
-
-					available_keys = tree.keys()
-					missing = [col for col in columns_of_interest if col not in available_keys]
-					if missing:
-						print(f"Skipping {root_path.name} -- missing columns: {missing}")
-						continue
-
-					n_entries = tree.num_entries
-					total_entries += n_entries
-
-
-					arrays = tree.arrays(columns_of_interest, library='ak')
-					for col in columns_of_interest:
-						collected_arrays[col].append(arrays[col])
-
-			except Exception as e:
-				print(f"Could not read {root_path.name}: {e}")
-
-	data_dict = {col: ak.concatenate(collected_arrays[col]) if collected_arrays[col] else ak.Array([]) for col in columns_of_interest}
-	return data_dict, total_entries
-
-def make_plot(data_1, data_2, label_1:str, label_2:str, title:str, plot_range:tuple, xaxis_label:str, dataset_name:str, fig_name:str):
-	processed_data_1 = ak.flatten(data_1)
-	processed_data_1 = np.array(processed_data_1)
-	processed_data_2 = ak.flatten(data_2)
-	processed_data_2 = np.array(processed_data_2)
-
-	plt.figure(figsize=(7,5))
-	bins = np.linspace(plot_range[0], plot_range[1], 50)
-
-	plt.hist(processed_data_1, bins=bins, range=plot_range, histtype='step', linewidth=1.5, label=label_1, color='orange')
-	plt.hist(processed_data_2, bins=bins, range=plot_range, histtype='step', linewidth=1.5, label=label_2, color='blue')
-
-	plt.xlabel(xaxis_label)
-	plt.ylabel('Count')
-	
-	plt.title(f"{title}\n{dataset_name}")
-	plt.legend()
-	plt.tight_layout()
-	
-	output_dir = f'{plot_output_dir}/{dataset_name}/{fig_name}'
-	os.makedirs(f'{plot_output_dir}/{dataset_name}', exist_ok=True)		
-	plt.savefig(output_dir, dpi=300)
-	plt.close()
-	print(f'the plot was saved in {output_dir}')
-
-	return None
+# }
 
 def main():
-	## get the data of your interest
-	data_dict = {}
-	columns_of_interest = ['Electron_pt', 'Electron_eta', 'Electron_phi', 'Electron_genPartFlav', 'Electron_isLowPt', 'Electron_isPF', 'Electron_genPartIdx',
-							'GenPart_statusFlags', 'GenPart_pdgId', 'GenPart_status']
+	sample_yaml = 'sample.yaml'
+	plot_output_dir = '/eos/user/m/mkanemur/WebEOS/WorkingPoint'
+	
+	## Open a pikle file
+	pkl_fname = 'processed/HAHM_VBF_processed.pkl'
+	with open(pkl_fname, 'rb') as file:
+		data = pickle.load(file)
+	dataset_name = pkl_fname.split('/')[1].split('.')[0].replace('_processed', '') ## i.e., HAHM_VBF
 
-	for dataset, dirs in root_dirs.items():
-		print(f'Processing {dataset}...')
-		data_dict[dataset], _ = process_root(dirs=dirs, columns_of_interest=columns_of_interest)
+	key_list = list(data.keys())
+	print(key_list)
+	print(data[key_list[0]].keys())
+	print(data[key_list[0]]['data'].keys())
 
-	## plot pT distribution (lowPT vs PF)
-	for dataset in list(data_dict.keys()):
-		data = data_dict[dataset]
+	electron_vars = ['Electron_pt', 'Electron_eta', 'Electron_phi', 'Electron_isLowPt', 
+	'Electron_isPF', 'Electron_isPFoverlap', 'Electron_genPartFlav', 'Electron_genPartIdx', 
+	'GenPart_statusFlags', 'GenPart_pdgId', 'GenPart_status', 'Electron_lowPtID_10Jun2025', 
+	'Electron_PFEleMvaID_Run3CustomJpsitoEEValue', 'Electron_PFEleMvaID_Winter22NoIsoV1Value']
 
-		lowpt_mask, pf_mask = data['Electron_isLowPt'] == 1, data['Electron_isPF'] == 1
-		lowPT_ele = data['Electron_pt'][lowpt_mask]
-		PF_ele = data['Electron_pt'][pf_mask]
+	## goal: get a signal/bkg where Electron_genPartFlav == 1, 12, 22
+	mass_points = list(data.keys()) ## M1, M3p1, etc
+	for mass_point in mass_points:
+		total_events = data[mass_point]['total_entries']
+		available_vals = list(data[mass_point]['data'].keys()) ## Electron_pt, Electron_eta, Electron_genPartFlav etc
 
-		plot_arg = {'data_1': lowPT_ele,
-					'data_2': PF_ele,
-					'label_1': 'lowPT',
-					'label_2': 'PF',
-					'title': 'pT distribution of lowPT and PF electrons',
-					'plot_range': (0, 30),
-					'xaxis_label': 'pT [GeV]',
-					'dataset_name': dataset}
-		if 'Inf' in dataset:
-			plot_arg['fig_name'] = 'pt_10ToInf_pT_dist_lowPT_PF'
-		else:
-			plot_arg['fig_name'] = 'pt_0To10_pT_dist_lowPT_PF'
-		make_plot(**plot_arg)
+		electrons = {var: data[mass_point]['data'].get(var) for var in electron_vars}
 
-	## plot #electron for each genPartFlav
-	for dataset in list(data_dict.keys()):
-		data = data_dict[dataset]
-		if 'Inf' in dataset:
-			fig_name = 'pt_10ToInf_pT_dist_lowPT_PF'
-		else:
-			fig_name = 'pt_0To10_pT_dist_lowPT_PF'
-		plot_genPartFlav(dataset=data, dataset_name=dataset, fig_name=fig_name)
+		if electrons['Electron_pt'] is None or electrons['Electron_genPartFlav'] is None:
+			print(f'Missing Electron_pt or Electron_genPartFlav in {mass_point}')
+			continue
+
+		## set up signal and background
+		flav = electrons['Electron_genPartFlav']
+		signal_mask = (flav == 1) | (flav == 5) | (flav == 22)
+		bkg_mask = ~signal_mask
+		
+		signal, background = {}, {}
+
+		for var, arr in electrons.items():
+			sig = arr[signal_mask]
+			bkg = arr[bkg_mask]
+
+			sig_np = ak.to_numpy(ak.flatten(sig))
+			bkg_np = ak.to_numpy(ak.flatten(bkg))
+			signal[var] = sig_np
+			background[var] = bkg_np
+
+		## Each variable is stored as np array
+		data[mass_point]['data']['signal'] = signal
+		data[mass_point]['data']['background'] = background
+		print(f"{mass_point}: signal = {len(signal['Electron_pt'])}, background = {len(background['Electron_pt'])}")
+
+
+	aggregated_signal_data, aggregated_background_data = aggregate_data(data)
+
+	####### Plot kinematic vars #######
+	# vars_to_plot = {'Electron_pt': (0, 20), 'Electron_eta': (-3, 3), 'Electron_phi': (-3, 3)}
+	vars_to_plot = {
+					 # 'Electron_lowPtID_10Jun2025': (-10, 10), 
+					# 'Electron_PFEleMvaID_Run3CustomJpsitoEEValue': (-10, 10),
+					'Electron_PFEleMvaID_Winter22NoIsoV1Value': (-1, 1)
+					}
+	params = {
+		'sig_data': aggregated_signal_data, 
+		'bkg_data': aggregated_background_data, 
+		'plot_vars': vars_to_plot, 
+		'dataset_name': dataset_name, 
+		'output_dir': f'{plot_output_dir}/{dataset_name}'
+	}
+	plot_kinematics(**params)
+
+	####### plot IDs #######
+	# vars_to_plot = {'Electron_lowPtID_10Jun2025': [(-1000, 20), -1000], 
+	# 				'Electron_PFEleMvaID_Run3CustomJpsitoEEValue': [(-10, 12), 20], 
+	# 				'Electron_PFEleMvaID_Winter22NoIsoV1Value': [(-1.5, 1.5), 20]}
+	# params = {
+	# 	'sig_data': aggregated_signal_data, 
+	# 	'bkg_data': aggregated_background_data, 
+	# 	'plot_vars': vars_to_plot, 
+	# 	'dataset_name': dataset_name, 
+	# 	'output_dir': f'{plot_output_dir}/{dataset_name}'
+	# }
+	# plot_id(**params)
 
 if __name__ == "__main__":
 	main()
