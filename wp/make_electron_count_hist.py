@@ -8,7 +8,8 @@ import yaml
 import process_root
 import subprocess
 import pickle
-from Electron_Kinematics_Plotter import aggregate_data, plot_kinematics, plot_id
+from Electron_Kinematics_Plotter import aggregate_data, plot_kinematics, plot_id, make_genflav_barplot
+import WP_derivation
 
 # source: https://github.com/cms-sw/cmssw/blob/c1b84d22fdf538675959e10095c0fc9b7c36cf6c/PhysicsTools/NanoAOD/plugins/CandMCMatchTableProducer.cc#L50-L57
 flav_map = {0: 'unmatched', 
@@ -138,7 +139,7 @@ def main():
 
 		## set up signal and background
 		flav = electrons['Electron_genPartFlav']
-		signal_mask = (flav == 1) | (flav == 5) | (flav == 22)
+		signal_mask = (flav == 1) | (flav == 15) | (flav == 22)
 		bkg_mask = ~signal_mask
 		
 		signal, background = {}, {}
@@ -159,33 +160,39 @@ def main():
 
 
 	aggregated_signal_data, aggregated_background_data = aggregate_data(data)
+	# make_genflav_barplot(aggregated_signal_data, aggregated_background_data, dataset_name, f'{plot_output_dir}/{dataset_name}')
+	
+
+	WP_derivation.main(aggregated_signal_data, aggregated_background_data)
 
 	####### Plot kinematic vars #######
 	# vars_to_plot = {'Electron_pt': (0, 20), 'Electron_eta': (-3, 3), 'Electron_phi': (-3, 3)}
-	vars_to_plot = {
-					 # 'Electron_lowPtID_10Jun2025': (-10, 10), 
+	# vars_to_plot = {
+					#  'Electron_lowPtID_10Jun2025': (-10, 10), 
 					# 'Electron_PFEleMvaID_Run3CustomJpsitoEEValue': (-10, 10),
-					'Electron_PFEleMvaID_Winter22NoIsoV1Value': (-1, 1)
-					}
-	params = {
-		'sig_data': aggregated_signal_data, 
-		'bkg_data': aggregated_background_data, 
-		'plot_vars': vars_to_plot, 
-		'dataset_name': dataset_name, 
-		'output_dir': f'{plot_output_dir}/{dataset_name}'
-	}
-	plot_kinematics(**params)
-
-	####### plot IDs #######
-	# vars_to_plot = {'Electron_lowPtID_10Jun2025': [(-1000, 20), -1000], 
-	# 				'Electron_PFEleMvaID_Run3CustomJpsitoEEValue': [(-10, 12), 20], 
-	# 				'Electron_PFEleMvaID_Winter22NoIsoV1Value': [(-1.5, 1.5), 20]}
+					# 'Electron_PFEleMvaID_Winter22NoIsoV1Value': (-1, 1)
+					# }
 	# params = {
 	# 	'sig_data': aggregated_signal_data, 
 	# 	'bkg_data': aggregated_background_data, 
 	# 	'plot_vars': vars_to_plot, 
 	# 	'dataset_name': dataset_name, 
 	# 	'output_dir': f'{plot_output_dir}/{dataset_name}'
+	# }
+	# plot_kinematics(**params)
+
+	####### plot IDs #######
+	# vars_to_plot = {
+	# 'Electron_lowPtID_10Jun2025': [(-20, 20), -1000], 
+	# 				'Electron_PFEleMvaID_Run3CustomJpsitoEEValue': [(-11, 11), 20], 
+					# 'Electron_PFEleMvaID_Winter22NoIsoV1Value': [(-1.2, 1.2), 20]}
+	# params = {
+	# 	'sig_data': aggregated_signal_data, 
+	# 	'bkg_data': aggregated_background_data, 
+	# 	'plot_vars': vars_to_plot, 
+	# 	'dataset_name': dataset_name, 
+	# 	'output_dir': f'{plot_output_dir}/{dataset_name}',
+	# 	'log_scale': True
 	# }
 	# plot_id(**params)
 
