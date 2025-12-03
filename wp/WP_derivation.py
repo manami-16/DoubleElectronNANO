@@ -57,7 +57,7 @@ def derive_mvaID_cut(data, id_type: str, threshold: int, pt_step=0.2):
 		pt_mask = (pt >= lo) & (pt < hi)
 
 		cropped_data = {k: v[pt_mask] for k, v in data.items()}
-		cropped_id = cropped_data[id_type]
+		cropped_id = cropped_data[id_type]		
 
 		## get percentile
 		if len(cropped_id) == 0:
@@ -66,15 +66,14 @@ def derive_mvaID_cut(data, id_type: str, threshold: int, pt_step=0.2):
 			perc = np.percentile(cropped_id, upper_threshold)
 			percentile_values.append(perc)
 
-	print(f'MVA ID was derived: {np.shape(percentile_values)}')
 	return pt_bins[:-1], percentile_values
 
 def plot_mva(pt_bins, perc_vals, id_type, output_dir):
 	
 	output_dir = Path(output_dir)
 	output_dir.mkdir(parents=True, exist_ok=True)
-	
-	wps = sorted(perc_vals.keys())   # ensure increasing order
+
+	wps = perc_vals.keys()
 	norm = plt.Normalize(min(wps), max(wps))
 	cmap = plt.cm.cividis  # gradient colormap
 	for wp in wps:
@@ -88,7 +87,7 @@ def plot_mva(pt_bins, perc_vals, id_type, output_dir):
 			Line2D([0], [0], color=color, lw=3, label=f"WP{wp}")  # no marker
 		)
 
-	plt.yscale('log')
+	# plt.yscale('log')
 	plt.xlabel('pT')
 	plt.ylabel('mvaID cut')
 	plt.title(f"MVA ID: {id_type} log-scaled\nHAHM_VBF")
@@ -142,14 +141,14 @@ def get_efficiency(data: dict, id_type: str, percentile_values: list, pt_step=0.
 		eff = passed_electrons / all_electrons
 		efficiencies.append(eff)
 		
-	return pt_bins, efficiencies
+	return pt_bins[:-1], efficiencies
 
 def plot_efficiency(pt_bins, wp_perc, id_type, output_dir, background=False):
 	
 	output_dir = Path(output_dir)
 	output_dir.mkdir(parents=True, exist_ok=True)
 	
-	wps = sorted(wp_perc.keys())
+	wps = wp_perc.keys()
 	
 	# Set up coloring for different working points
 	norm = plt.Normalize(min(wps), max(wps))
@@ -166,13 +165,8 @@ def plot_efficiency(pt_bins, wp_perc, id_type, output_dir, background=False):
 		else: 
 			data = wp_perc[wp]['sig_eff']
 
-		# Ensure the number of x points matches the number of efficiencies
-		if len(x_values) == len(data):
-			plt.plot(x_values, data, label=f'WP{wp}', marker='o', linestyle='-', color=color)
-		else:
-			print(f"Warning: Data points mismatch for WP{wp}. Check binning.")
-			continue
-	
+		plt.plot(pt_bins, data, label=f'WP{wp}', marker='o', linestyle='-', color=color)
+
 	plt.xlabel('Electron $p_T$ [GeV]')
 	plt.ylabel('Efficiency')
 	if background:
@@ -209,33 +203,36 @@ def main(signal_data, background_data):
 	thresholds = list(np.arange(50, 95, 5))
 
 	id_params = {
-		'Electron_PFEleMvaID_Run3CustomJpsitoEEValue': [sig_pf, bkg_pf],
-		'Electron_PFEleMvaID_Winter22NoIsoV1Value': [sig_pf, bkg_pf], 
-		'Electron_lowPtID_10Jun2025': [sig_lowpt, bkg_lowpt]}
+		# 'Electron_PFEleMvaID_Run3CustomJpsitoEEValue': [sig_pf, bkg_pf],
+		# 'Electron_PFEleMvaID_Winter22NoIsoV1Value': [sig_pf, bkg_pf], 
+		'Electron_lowPtID_10Jun2025': [sig_lowpt, bkg_lowpt]
+		}
 
-	id_type = 'Electron_PFEleMvaID_Winter22NoIsoV1Value'
+	# id_type = 'Electron_lowPtID_10Jun2025'
+	for id in id_params.keys():
+		id_type = id
+		print(f'*** {id_type} ***')
+		wp_perc = {}
 
-	wp_perc = {}
-	for workingpoint in thresholds:
-		print(f'Working on WP{workingpoint}...')
-		wp_perc[workingpoint] = {}
+		for workingpoint in thresholds:
+			print(f'Working on WP{workingpoint}...')
+			wp_perc[workingpoint] = {}
 
-		## derive MVA cut
-		pt_bins, perc_values = derive_mvaID_cut(data=id_params[id_type][0], id_type=id_type, threshold=workingpoint, pt_step=0.2)
-		wp_perc[workingpoint]['mvaID'] = perc_values
+			## derive MVA cut from signal electrons
+			pt_bins, perc_values = derive_mvaID_cut(data=id_params[id_type][0], id_type=id_type, threshold=workingpoint, pt_step=0.2)
+			wp_perc[workingpoint]['mvaID'] = perc_values
 
-		## compute efficiency
-		pt_bins, sig_eff = get_efficiency(data=id_params[id_type], id_type=id_type, pt_step=0.2, percentile_values=wp_perc[workingpoint]['mvaID'])
-		pt_bins, bkg_eff = get_efficiency(data=id_params[id_type], id_type=id_type, pt_step=0.2, percentile_values=wp_perc[workingpoint]['mvaID'], background=True)
-		wp_perc[workingpoint]['sig_eff'] = sig_eff
-		wp_perc[workingpoint]['bkg_eff'] = bkg_eff
+			## compute efficiency
+			# pt_bins, sig_eff = get_efficiency(data=id_params[id_type], id_type=id_type, pt_step=0.2, percentile_values=wp_perc[workingpoint]['mvaID'])
+			pt_bins, bkg_eff = get_efficiency(data=id_params[id_type], id_type=id_type, pt_step=0.2, percentile_values=wp_perc[workingpoint]['mvaID'], background=True)
+			# wp_perc[workingpoint]['sig_eff'] = sig_eff
+			wp_perc[workingpoint]['bkg_eff'] = bkg_eff
 
-	plot_output_dir = '/eos/user/m/mkanemur/WebEOS/WorkingPoint'
-	output_dir = f'{plot_output_dir}/HAHM_VBF'
-	plot_mva(pt_bins, wp_perc, id_type, output_dir)
-	plot_efficiency(pt_bins, wp_perc, id_type, output_dir)
-	plot_efficiency(pt_bins, wp_perc, id_type, output_dir, background=True)
-
+		plot_output_dir = '/eos/user/m/mkanemur/WebEOS/WorkingPoint'
+		output_dir = f'{plot_output_dir}/HAHM_VBF'
+		# plot_mva(pt_bins, wp_perc, id_type, output_dir)
+		# plot_efficiency(pt_bins, wp_perc, id_type, output_dir)
+		plot_efficiency(pt_bins, wp_perc, id_type, output_dir, background=True)
 
 if __name__ == "__main__":
 	parser = argparse.ArgmentParser()
