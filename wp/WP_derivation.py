@@ -60,9 +60,13 @@ def derive_mvaID_cut(data, id_type: str, threshold: int, pt_step=0.2):
 		cropped_id = cropped_data[id_type]
 
 		## get percentile
-		perc = np.percentile(cropped_id, upper_threshold)
-		percentile_values.append(perc)
+		if len(cropped_id) == 0:
+			percentile_values.append(None)
+		else:
+			perc = np.percentile(cropped_id, upper_threshold)
+			percentile_values.append(perc)
 
+	print(f'MVA ID was derived: {np.shape(percentile_values)}')
 	return pt_bins[:-1], percentile_values
 
 def plot_mva(pt_bins, perc_vals, id_type, output_dir):
@@ -70,10 +74,9 @@ def plot_mva(pt_bins, perc_vals, id_type, output_dir):
 	output_dir = Path(output_dir)
 	output_dir.mkdir(parents=True, exist_ok=True)
 	
-	# wps = perc_vals.keys()
 	wps = sorted(perc_vals.keys())   # ensure increasing order
 	norm = plt.Normalize(min(wps), max(wps))
-	cmap = plt.cm.cividis  # choose your gradient colormap
+	cmap = plt.cm.cividis  # gradient colormap
 	for wp in wps:
 		color = cmap(norm(wp))
 		plt.plot(pt_bins, perc_vals[wp]['mvaID'], label=f'WP{wp}', marker='*', color=color)
@@ -98,7 +101,7 @@ def plot_mva(pt_bins, perc_vals, id_type, output_dir):
 	print(f'the plot was saved in {output_dir}/{fig_name}')
 
 
-def get_efficiency(data: dict, id_type: str, percentile_values: list, pt_step=0.2):
+def get_efficiency(data: dict, id_type: str, percentile_values: list, pt_step=0.2, background=False):
 	valid_ids = [
 		'Electron_PFEleMvaID_Run3CustomJpsitoEEValue', 
 		'Electron_PFEleMvaID_Winter22NoIsoV1Value', 
@@ -106,28 +109,37 @@ def get_efficiency(data: dict, id_type: str, percentile_values: list, pt_step=0.
 	]
 	assert id_type in valid_ids, f'id_type must be one of: {valid_ids}'
 
-	pt = data['Electron_pt']
-	min_pt = np.floor(np.min(pt))
+	if background:
+		pt = data[1]['Electron_pt']
+		min_pt = np.floor(np.min(data[1]['Electron_pt']))
+		mva = data[1][id_type]
+	else:
+		pt = data[0]['Electron_pt']
+		min_pt = np.floor(np.min(pt))
+		mva = data[0][id_type]
+
 	pt_bins = np.arange(min_pt, 10 + pt_step, pt_step)
-	mva = data[id_type]
 	efficiencies = []
 
 	# Loop over the bins and calculate efficiency
 	for i in range(len(pt_bins) - 1):
 		lo, hi = pt_bins[i], pt_bins[i+1]
 		cut_val = percentile_values[i]
+		if cut_val is None:
+			efficiencies.append(0)
+			continue
 
 		# mask electrons falling in pt range
 		pt_mask = (pt >= lo) & (pt < hi)
 
-		all_signal = np.sum(pt_mask)
-		if all_signal == 0:
-			efficiencies.append(0)      # avoid division by zero
+		all_electrons = np.sum(pt_mask)
+		if all_electrons == 0:
+			efficiencies.append(0) # avoid division by zero
 			continue
 
 		# those passing the MVA cut
-		passed_signal = np.sum(mva[pt_mask] > cut_val)
-		eff = passed_signal / all_signal
+		passed_electrons = np.sum(mva[pt_mask] > cut_val)
+		eff = passed_electrons / all_electrons
 		efficiencies.append(eff)
 		
 	return pt_bins, efficiencies
@@ -208,17 +220,19 @@ def main(signal_data, background_data):
 		print(f'Working on WP{workingpoint}...')
 		wp_perc[workingpoint] = {}
 
+		## derive MVA cut
 		pt_bins, perc_values = derive_mvaID_cut(data=id_params[id_type][0], id_type=id_type, threshold=workingpoint, pt_step=0.2)
 		wp_perc[workingpoint]['mvaID'] = perc_values
 
-		pt_bins, sig_eff = get_efficiency(data=id_params[id_type][0], id_type=id_type, pt_step=0.2, percentile_values=wp_perc[workingpoint]['mvaID'])
-		pt_bins, bkg_eff = get_efficiency(data=id_params[id_type][1], id_type=id_type, pt_step=0.2, percentile_values=wp_perc[workingpoint]['mvaID'])
+		## compute efficiency
+		pt_bins, sig_eff = get_efficiency(data=id_params[id_type], id_type=id_type, pt_step=0.2, percentile_values=wp_perc[workingpoint]['mvaID'])
+		pt_bins, bkg_eff = get_efficiency(data=id_params[id_type], id_type=id_type, pt_step=0.2, percentile_values=wp_perc[workingpoint]['mvaID'], background=True)
 		wp_perc[workingpoint]['sig_eff'] = sig_eff
 		wp_perc[workingpoint]['bkg_eff'] = bkg_eff
 
 	plot_output_dir = '/eos/user/m/mkanemur/WebEOS/WorkingPoint'
 	output_dir = f'{plot_output_dir}/HAHM_VBF'
-	# plot_mva(pt_bins, wp_perc, id_type, output_dir)
+	plot_mva(pt_bins, wp_perc, id_type, output_dir)
 	plot_efficiency(pt_bins, wp_perc, id_type, output_dir)
 	plot_efficiency(pt_bins, wp_perc, id_type, output_dir, background=True)
 
