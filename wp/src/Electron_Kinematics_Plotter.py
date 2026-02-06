@@ -100,23 +100,28 @@ def plot_id(sig_data, bkg_data, plot_vars: list, dataset_name: str, output_dir: 
 			plot_one(var, sig_data[var][sig_pf_mask], bkg_data[var][bkg_pf_mask], log_scale=log_scale, label_suffix="PF")
 
 def make_genflav_barplot(sig_data, bkg_data, dataset_name, output_dir):
-	genpartflav_flags = [0, 1, 15, 22, 5, 4, 3]
+	genpartflav_flags = {0: "Unmatched", 1: "Prompted", 15: "From Prompt Tau", 
+						22: "Prompt photon(conversion)", 5: "From B", 
+						4: "From C", 3: "From light or unknown"}
+
 	# Extract arrays
 	sig_genpartflav = sig_data["Electron_genPartFlav"]
 	bkg_genpartflav = bkg_data["Electron_genPartFlav"]
 
-	# sig_lowpt_mask = sig_data['Electron_isLowPt'] == True
-	# sig_pf_mask    = sig_data['Electron_isPF'] == True
+	sig_lowpt_mask = sig_data['Electron_isLowPt'] == True
+	sig_pf_mask    = sig_data['Electron_isPF'] == True
 
-	# bkg_lowpt_mask = bkg_data['Electron_isLowPt'] == True
-	# bkg_pf_mask    = bkg_data['Electron_isPF'] == True
+	bkg_lowpt_mask = bkg_data['Electron_isLowPt'] == True
+	bkg_pf_mask    = bkg_data['Electron_isPF'] == True
 
 	flav = np.concatenate([sig_genpartflav, bkg_genpartflav])
 	# lowpt_flav = np.concatenate([sig_genpartflav[sig_lowpt_mask], bkg_genpartflav[bkg_lowpt_mask]])
-	# pf_flav = np.concatenate([sig_genpartflav[sig_pf_mask], bkg_genpartflav[bkg_pf_mask]])
+	lowpt_flav = sig_genpartflav[sig_lowpt_mask]
+	pf_flav = np.concatenate([sig_genpartflav[sig_pf_mask], bkg_genpartflav[bkg_pf_mask]])
 
 	def plot_one(flav_data):
 		x_labels = sorted(genpartflav_flags)
+		x_tick_labels = [genpartflav_flags[k] for k in x_labels]
 
 		counts_dict = {flag: 0 for flag in x_labels} 
 		unique_flavs, counts = np.unique(flav_data, return_counts=True)
@@ -150,13 +155,13 @@ def make_genflav_barplot(sig_data, bkg_data, dataset_name, output_dir):
 				)
 
 		# Set the ticks to use the correct integer flavor flags
-		plt.xticks(x_pos, x_labels)
+		plt.xticks(x_pos, x_tick_labels, rotation=30, ha='right')
 		plt.xlabel("Electron_genPartFlav")
 		plt.ylabel("Number of electrons")
-		plt.title(f"{dataset_name}: Electron_genPartFlav distribution")
+		plt.title(f"{dataset_name}: LowPt-only Signal Electron_genPartFlav distribution")
 
 		os.makedirs(output_dir, exist_ok=True)
-		outfile = os.path.join(output_dir, f"{dataset_name}_genPartFlav.png")
+		outfile = os.path.join(output_dir, f"{dataset_name}_lowpt_signal_genPartFlav.png")
 
 		plt.tight_layout()
 		plt.savefig(outfile)
@@ -165,4 +170,5 @@ def make_genflav_barplot(sig_data, bkg_data, dataset_name, output_dir):
 		print(f"Plot is saved at {outfile}")
 
 	## plot lowpt and pf 
-	plot_one(flav)
+	# plot_one(flav)
+	plot_one(lowpt_flav)

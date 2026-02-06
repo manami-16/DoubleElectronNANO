@@ -14,7 +14,7 @@ PLOT_OUTPUT_DIR = '/eos/user/m/mkanemur/WebEOS/WorkingPoint'
 
 def main():
     parser = argparse.ArgumentParser(description="Generate electron kinematics and variable plots.")
-    parser.add_argument("--dataset", default='VBF', choices=['VBF', 'Inclusive'], help='Choose one from the available datasets')
+    parser.add_argument("--dataset", default='VBF', choices=['VBF', 'Inclusive', 'JPsi'], help='Choose one from the available datasets')
     parser.add_argument("--outdir", default=PLOT_OUTPUT_DIR, help="Directory for plot outputs.")
     parser.add_argument("--plot", nargs="+", default=["kinematics", "id", 'genPartFlav'], help="Which plots to run: kinematics, id, or genPartFlav.")
 

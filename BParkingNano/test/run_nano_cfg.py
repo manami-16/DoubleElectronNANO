@@ -240,6 +240,7 @@ if not options.inputFiles:
             options.inputFiles = [
             f'file:/eos/cms/store/cmst3/group/xee/signalSamples/HAHM_DarkPhoton_13p6TeV_Nov2024/HAHM_ZpToEE_MZp3_VBF_jetcut_ptj1_30_ptj2_30_lpt0p5_k1e_10_eps0p02_13p6TeV_50k_MINIAOD_2024.root'
             ]
+            # options.inputFiles = ["root://cms-xrd-global.cern.ch//store/data/Run2024C/ParkingVBF0/MINIAOD/MINIv6NANOv15-v1/2520000/00056553-24c5-4039-b531-c9fb5fa5a070.root",]
         elif options.isMC and options.isMinBias:       pass # not implemented
         elif options.isMC and options.isPromptJpsi:    pass # not implemented
         elif options.isMC and options.isPromptUpsilon: pass # not implemented
@@ -250,6 +251,7 @@ if not options.inputFiles:
             ]
 
 
+# options.maxEvents = 5000
 annotation = '%s nevts:%d' % (outputFileNANO, options.maxEvents)
 
 # Process

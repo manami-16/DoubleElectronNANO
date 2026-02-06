@@ -295,12 +295,12 @@ electronsBParkMCMatchForTable = cms.EDProducer("MCMatcher",  # cut on deltaR, de
     mcPdgId     = cms.vint32(11),                 # one or more PDG ID (11 = el, 22 = pho); absolute values (see below)
     checkCharge = cms.bool(False),              # True = require RECO and MC objects to have the same charge
     mcStatus    = cms.vint32(1),                # PYTHIA status code (1 = stable, 2 = shower, 3 = hard scattering)
-    maxDeltaR   = cms.double(0.03),             # Maximum deltaR for the match
+    maxDeltaR   = cms.double(0.3),             # Maximum deltaR for the match
     maxDPtRel   = cms.double(0.5),              # Maximum deltaPt/Pt for the match
     # maxDeltaR   = cms.double(0.05),             # Maximum deltaR for the match
     # maxDPtRel   = cms.double(0.5),              # Maximum deltaPt/Pt for the match
     # TODO: check changes
-    resolveAmbiguities    = cms.bool(True),    # Forbid two RECO objects to match to the same GEN object
+    resolveAmbiguities    = cms.bool(True),    # Forbid two RECO objects to match to the same GEN object. Default True
     # NB: resolveAmbiguities = False before. Why?
     resolveByMatchQuality = cms.bool(True),     # False = just match input in order; True = pick lowest deltaR pair first
 )
@@ -328,13 +328,14 @@ electronsBParkSequence = cms.Sequence(
     seedGainEleLowPt +
     modifiedIDLowPtElectrons +
     slimmedPFElectronsWithUserData +
-    slimmedLowPtElectronsWithUserData +
-    electronsForAnalysis
+    slimmedLowPtElectronsWithUserData
+    # electronsForAnalysis 
 )
 
 electronBParkMC = cms.Sequence(
     electronsBParkSequence +
     electronsBParkMCMatchForTable +
+    electronsForAnalysis + ## Adding this after MCMatchForTable
     selectedElectronsMCMatchEmbedded +
     electronBParkMCTable
 )

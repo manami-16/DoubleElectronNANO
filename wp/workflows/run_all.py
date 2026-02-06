@@ -13,7 +13,7 @@ PLOT_OUTPUT_DIR = '/eos/user/m/mkanemur/WebEOS/WorkingPoint'
 parser = argparse.ArgumentParser(description="Concatenate nanoAODs for multiple mass points into a single pkl file")
 parser.add_argument("--dataset", default='VBF', choices=['VBF', 'Inclusive', 'JPsi'], help='Choose one from the available datasets')
 parser.add_argument("--pkl_outdir", default='processed', help="Directory for saving a pikle file.")
-parser.add_argument("--plot_outdir", default=PLOT_OUT_DIR, help="Directory for saving plots.")
+parser.add_argument("--plot_outdir", default=PLOT_OUTPUT_DIR, help="Directory for saving plots.")
 
 args = parser.parse_args()
 dataset_name = args.dataset

@@ -10,7 +10,7 @@ def get_col_of_interest(dataset_name):
 	if 'HAHM' in dataset_name:
 		columns_of_interest = kinematics_cols + gen_cols + id_cols
 	elif 'JPsiToEE' in dataset_name:
-		columns_of_interest = kinematics_cols + id_cols
+		columns_of_interest = kinematics_cols
 		columns_of_interest.append('Electron_genPartFlav')
 
 	return columns_of_interest
@@ -149,6 +149,8 @@ def split_sig_bkg(pkl_fname, pkl_outdir):
 		signal, background = {}, {}
 
 		for var, arr in electrons.items():
+			if arr is None:
+				print("None column:", var)
 			sig = arr[signal_mask]
 			bkg = arr[bkg_mask]
 
