@@ -185,6 +185,83 @@ def plot_efficiency(pt_bins, wp_perc, id_type, output_dir, dataset_name, backgro
 	plt.close()
 	print(f'The efficiency plot was saved in {output_dir}/{fig_name} ')
 
+def plot_bkg_rate_scan(pt_bins, wp_perc, id_type, output_dir, dataset_name, 
+	split_pt=3.0, x_max=5.0, y_max=None, highlight_wps=None):
+
+	"""
+	Plot: background rate (fake rate) vs pT for many working points.
+	Inputs: 
+		split_pt - a vertical line of the boundary of Lowpt and PF
+		x_max = pT max in the plot. SOS used pTmax = 5 
+		highlight_wps = annotate these WPs if present 
+	"""
+
+	output_dir = Path(output_dir)
+	output_dir.mkdir(parents=True, exist_ok=True)
+
+	wps = sorted(wp_perc.keys())
+	norm = plt.Normalize(min(wps), max(wps))
+	cmap = plt.cm.cividis
+	fig, ax = plt.subplots()
+
+	# Main curves: bkg_eff(pT) for each WP
+	for wp in wps:
+		bkg = wp_perc[wp].get("bkg_eff", None)
+		if bkg is None:
+			continue
+		color = cmap(norm(wp))
+		plt.plot(pt_bins, bkg, color=color, lw=1.5, alpha=0.95)
+
+	# Vertical separator between LowPt and PF regions
+	# plt.axvline(split_pt, color="k", linestyle="--", lw=1.0)
+	# plt.text(split_pt - 0.05, plt.ylim()[1] * 0.95, "LowPt eles",
+	# 		 ha="right", va="top")
+	# plt.text(split_pt + 0.05, plt.ylim()[1] * 0.95, "PF eles",
+	# 		 ha="left", va="top")
+
+	# Axis labels / title
+	plt.xlabel(r"Electron $p_T$ [GeV]")
+	plt.ylabel("background rate (fake rate)")
+
+	if 'PF' in id_type:
+		title = f"PF Background rate vs $p_T$\n{dataset_name} - {id_type}"
+		x_max = 6
+	else:
+		title = f"LowPT Background rate vs $p_T$\n{dataset_name} - {id_type}"
+		x_max = 4
+	plt.title(title)
+
+	# Zoom to match the style of the shown plot
+	plt.xlim(max(0, np.min(pt_bins)), x_max)
+	if y_max is not None:
+		plt.ylim(0, y_max)
+	else:
+		plt.ylim(bottom=0)
+
+	# Optional: annotate a couple of WPs (like “80% WP”, “98% WP”)
+	# We'll place labels near the right side at the last valid bin in view.
+	def _last_valid_in_view(yvals, xvals, xmax):
+		idxs = [i for i, x in enumerate(xvals) if x <= xmax and i < len(yvals)]
+		for i in reversed(idxs):
+			y = yvals[i]
+			if y is not None and np.isfinite(y):
+				return xvals[i], y
+		return None, None
+
+	# Colorbar-style legend substitute (optional, but compact)
+	sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+	sm.set_array([])
+	cbar = fig.colorbar(sm, ax=ax, pad=0.02)
+	cbar.set_label("Signal WP (%)")
+
+	fig.tight_layout()
+
+	fig_name = f"bkg_rate_scan_{id_type}.png"
+	save_path = output_dir / fig_name
+	fig.savefig(save_path, dpi=300)
+	plt.close(fig)
+	print(f"The background scan plot was saved in {save_path}")
+
 def run_mva_workflow(signal_data, background_data, dataset_name, output_dir):
 	sig_lowpt, sig_pf = split_lowpt_pf(signal_data)
 	bkg_lowpt, bkg_pf = split_lowpt_pf(background_data)
@@ -218,5 +295,6 @@ def run_mva_workflow(signal_data, background_data, dataset_name, output_dir):
 		plot_mva(pt_bins, wp_perc, id_type, output_dir, dataset_name)
 		plot_efficiency(pt_bins, wp_perc, id_type, output_dir, dataset_name)
 		plot_efficiency(pt_bins, wp_perc, id_type, output_dir, dataset_name, background=True)
+		plot_bkg_rate_scan(pt_bins, wp_perc, id_type, output_dir, dataset_name)
 
 	print("\nAll plots generated.")
